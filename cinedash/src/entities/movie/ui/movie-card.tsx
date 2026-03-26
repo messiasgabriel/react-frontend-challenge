@@ -7,6 +7,9 @@ type MovieCardProps = {
 };
 
 export function MovieCard({ movie }: MovieCardProps) {
+    const year = movie.release_date
+        ? new Date(movie.release_date).getFullYear()
+        : 'N/A';
     return (
         <Card className="group overflow-hidden bg-slate-900 border-slate-800 transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20">
             <img
@@ -22,9 +25,7 @@ export function MovieCard({ movie }: MovieCardProps) {
                     <p className="text-yellow-500 text-sm font-medium">
                         ⭐ {movie.vote_average.toFixed(1)}
                     </p>
-                    <p className="text-slate-400 text-xs">
-                        {new Date(movie.release_date).getFullYear()}
-                    </p>
+                    <p className="text-slate-400 text-xs">{year}</p>
                 </div>
             </CardContent>
         </Card>

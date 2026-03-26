@@ -1,9 +1,14 @@
 import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import { useAuthStore } from '@/features/auth/model/auth-store';
-import { fetchPopularMovies } from '@/entities/movie/api/fetch-movies';
+import {
+    fetchPopularMovies,
+    searchMovies,
+} from '@/entities/movie/api/fetch-movies';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/entities/movie/ui/movie-card';
+import { SearchBar } from '@/features/movie-search/ui/search-bar';
 
 export const Route = createFileRoute('/dashboard')({
     beforeLoad: () => {
@@ -22,10 +27,16 @@ export function DashboardPage() {
     const navigate = useNavigate();
     const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { data, isLoading } = useQuery({
-        queryKey: ['movies', 'popular'],
-        queryFn: () => fetchPopularMovies(),
+        queryKey: ['movies', searchQuery ? 'search' : 'popular', searchQuery],
+        queryFn: () => {
+            if (searchQuery) {
+                return searchMovies(searchQuery);
+            }
+            return fetchPopularMovies();
+        },
     });
 
     const handleLogout = () => {
@@ -33,13 +44,9 @@ export function DashboardPage() {
         navigate({ to: '/login' });
     };
 
-    if (isLoading) {
-        return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-                <p className="text-white text-xl">Carregando...</p>
-            </div>
-        );
-    }
+    const handleSearch = useCallback((query: string) => {
+        setSearchQuery(query);
+    }, []);
 
     return (
         <div className="min-h-screen bg-slate-950">
@@ -65,16 +72,51 @@ export function DashboardPage() {
             </header>
 
             {/* Content */}
-            <main className="container mx-auto px-4 py-8">
-                <h2 className="text-3xl font-bold text-white mb-6">
-                    Filmes Populares
-                </h2>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    {data?.results.slice(0, 10).map((movie) => (
-                        <MovieCard key={movie.id} movie={movie} />
-                    ))}
+            <main className="container mx-auto px-4 py-8 space-y-8">
+                {/* Search */}
+                <div className="flex justify-center">
+                    <SearchBar onSearch={handleSearch} />
                 </div>
+
+                {isLoading ? (
+                    <div className="flex items-center justify-center py-24">
+                        <p className="text-white text-xl">Carregando...</p>
+                    </div>
+                ) : (
+                    <>
+                        {/* Title */}
+                        <h2 className="text-3xl font-bold text-white">
+                            {searchQuery
+                                ? `Resultados para "${searchQuery}"`
+                                : 'Filmes Populares'}
+                        </h2>
+
+                        {/* Results count */}
+                        {data && (
+                            <p className="text-slate-400">
+                                {data.total_results}{' '}
+                                {data.total_results === 1 ? 'resultado' : 'resultados'}
+                            </p>
+                        )}
+
+                        {/* Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                            {data?.results.length === 0 ? (
+                                <div className="col-span-full text-center py-12">
+                                    <p className="text-slate-400 text-lg">
+                                        Nenhum filme encontrado para "{searchQuery}"
+                                    </p>
+                                </div>
+                            ) : (
+                                data?.results
+                                    .slice(0, 20)
+                                    .map((movie) => (
+                                        <MovieCard key={movie.id} movie={movie} />
+                                    ))
+                            )}
+                        </div>
+                    </>
+                )}
             </main>
         </div>
     );
