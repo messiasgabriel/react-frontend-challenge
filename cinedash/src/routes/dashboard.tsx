@@ -3,12 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { useAuthStore } from '@/features/auth/model/auth-store';
 import {
+    discoverMovies,
     fetchPopularMovies,
     searchMovies,
 } from '@/entities/movie/api/fetch-movies';
 import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/entities/movie/ui/movie-card';
 import { SearchBar } from '@/features/movie-search/ui/search-bar';
+import { MovieFilters } from '@/features/movie-filters/ui/movie-filters';
+import { useFiltersStore } from '@/features/movie-filters/model/filters-store';
 
 export const Route = createFileRoute('/dashboard')({
     beforeLoad: () => {
@@ -29,12 +32,20 @@ export function DashboardPage() {
     const logout = useAuthStore((state) => state.logout);
     const [searchQuery, setSearchQuery] = useState('');
 
+    const { genreId, year, minRating } = useFiltersStore();
+    const hasFilters = genreId || year || minRating;
+
     const { data, isLoading } = useQuery({
-        queryKey: ['movies', searchQuery ? 'search' : 'popular', searchQuery],
+        queryKey: ['movies', searchQuery, genreId, year, minRating],
         queryFn: () => {
             if (searchQuery) {
                 return searchMovies(searchQuery);
             }
+
+            if (hasFilters) {
+                return discoverMovies({ genreId, year, minRating });
+            }
+
             return fetchPopularMovies();
         },
     });
@@ -78,44 +89,48 @@ export function DashboardPage() {
                     <SearchBar onSearch={handleSearch} />
                 </div>
 
+                {/* Filters */}
+                {!searchQuery && <MovieFilters />}
+
+                {/* Title */}
+                <h2 className="text-3xl font-bold text-white">
+                    {searchQuery
+                        ? `Resultados para "${searchQuery}"`
+                        : hasFilters
+                          ? 'Filmes Filtrados'
+                          : 'Filmes Populares'}
+                </h2>
+
+                {/* Results count */}
+                {data && !isLoading && (
+                    <p className="text-slate-400">
+                        {data.total_results}{' '}
+                        {data.total_results === 1 ? 'resultado' : 'resultados'}
+                    </p>
+                )}
+
+                {/* Loading State */}
                 {isLoading ? (
-                    <div className="flex items-center justify-center py-24">
-                        <p className="text-white text-xl">Carregando...</p>
+                    <div className="flex justify-center py-12">
+                        <p className="text-white text-lg">Carregando...</p>
                     </div>
                 ) : (
-                    <>
-                        {/* Title */}
-                        <h2 className="text-3xl font-bold text-white">
-                            {searchQuery
-                                ? `Resultados para "${searchQuery}"`
-                                : 'Filmes Populares'}
-                        </h2>
-
-                        {/* Results count */}
-                        {data && (
-                            <p className="text-slate-400">
-                                {data.total_results}{' '}
-                                {data.total_results === 1 ? 'resultado' : 'resultados'}
-                            </p>
+                    /* Grid */
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        {data?.results.length === 0 ? (
+                            <div className="col-span-full text-center py-12">
+                                <p className="text-slate-400 text-lg">
+                                    Nenhum filme encontrado
+                                </p>
+                            </div>
+                        ) : (
+                            data?.results
+                                .slice(0, 20)
+                                .map((movie) => (
+                                    <MovieCard key={movie.id} movie={movie} />
+                                ))
                         )}
-
-                        {/* Grid */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                            {data?.results.length === 0 ? (
-                                <div className="col-span-full text-center py-12">
-                                    <p className="text-slate-400 text-lg">
-                                        Nenhum filme encontrado para "{searchQuery}"
-                                    </p>
-                                </div>
-                            ) : (
-                                data?.results
-                                    .slice(0, 20)
-                                    .map((movie) => (
-                                        <MovieCard key={movie.id} movie={movie} />
-                                    ))
-                            )}
-                        </div>
-                    </>
+                    </div>
                 )}
             </main>
         </div>
