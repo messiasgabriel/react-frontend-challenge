@@ -5,7 +5,7 @@ export const Route = createRootRoute({
     component: RootComponent,
 });
 
-function RootComponent() {
+export function RootComponent() {
     return (
         <>
             <div className="min-h-screen bg-background">

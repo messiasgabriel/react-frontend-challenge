@@ -3,6 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
 import { loginSchema, type LoginFormData } from '../model/auth-schema';
 import { useAuthStore } from '../model/auth-store';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export function LoginForm() {
     const navigate = useNavigate();
@@ -25,61 +28,45 @@ export function LoginForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
-            <div className="space-y-4">
-                {/* Email */}
-                <div>
-                    <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-slate-300"
-                    >
-                        Email
-                    </label>
-                    <input
-                        {...register('email')}
-                        id="email"
-                        type="email"
-                        className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="seu@email.com"
-                    />
-                    {errors.email && (
-                        <p className="mt-1 text-sm text-red-500">
-                            {errors.email.message}
-                        </p>
-                    )}
-                </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Email */}
+            <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                    {...register('email')}
+                    id="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    className={errors.email ? 'border-destructive' : ''}
+                />
+                {errors.email && (
+                    <p className="text-sm text-destructive">
+                        {errors.email.message}
+                    </p>
+                )}
+            </div>
 
-                {/* Password */}
-                <div>
-                    <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-slate-300"
-                    >
-                        Senha
-                    </label>
-                    <input
-                        {...register('password')}
-                        id="password"
-                        type="password"
-                        className="mt-1 block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="••••••••"
-                    />
-                    {errors.password && (
-                        <p className="mt-1 text-sm text-red-500">
-                            {errors.password.message}
-                        </p>
-                    )}
-                </div>
+            {/* Password */}
+            <div className="space-y-2">
+                <Label htmlFor="password">Senha</Label>
+                <Input
+                    {...register('password')}
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    className={errors.password ? 'border-destructive' : ''}
+                />
+                {errors.password && (
+                    <p className="text-sm text-destructive">
+                        {errors.password.message}
+                    </p>
+                )}
             </div>
 
             {/* Submit */}
-            <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? 'Entrando...' : 'Entrar'}
-            </button>
+            </Button>
         </form>
     );
 }
