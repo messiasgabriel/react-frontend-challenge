@@ -7,7 +7,7 @@ import {
 import { useAuthStore } from '@/features/auth/model/auth-store';
 import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
 import { Button } from '@/shared/ui/button';
-import { MovieCard } from '@/entities/movie/ui/movie-card';
+import { WatchlistTable } from '@/features/watchlist/ui/watchlist-table';
 
 export const Route = createFileRoute('/watchlist')({
     beforeLoad: () => {
@@ -100,11 +100,7 @@ export function WatchlistPage() {
                         </Link>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                        {movies.map((movie) => (
-                            <MovieCard key={movie.id} movie={movie} />
-                        ))}
-                    </div>
+                    <WatchlistTable />
                 )}
             </main>
         </div>
