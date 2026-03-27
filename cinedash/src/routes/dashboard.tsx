@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { MovieCard } from '@/entities/movie/ui/movie-card';
 import { SearchBar } from '@/features/movie-search/ui/search-bar';
 import { MovieFilters } from '@/features/movie-filters/ui/movie-filters';
+import { MovieCardSkeleton } from '@/entities/movie/ui/movie-card-skeleton';
 
 export const Route = createFileRoute('/dashboard')({
     beforeLoad: () => {
@@ -139,8 +140,10 @@ export function DashboardPage() {
 
                 {/* Loading State */}
                 {isLoading ? (
-                    <div className="flex justify-center py-12">
-                        <p className="text-white text-lg">Carregando...</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        {Array.from({ length: 10 }).map((_, i) => (
+                            <MovieCardSkeleton key={i} />
+                        ))}
                     </div>
                 ) : (
                     <>
