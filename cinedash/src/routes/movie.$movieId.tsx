@@ -157,11 +157,16 @@ export function MovieDetailPage() {
                                     ? '❤️ Na Lista'
                                     : '🤍 Adicionar à Lista'}
                             </Button>
-                            {trailer && (
-                                <Button variant="outline">
-                                    ▶️ Assistir Trailer
+                            <div className="flex gap-3">
+                                <Button
+                                    onClick={handleToggleWatchlist}
+                                    className="gap-2"
+                                >
+                                    {inWatchlist
+                                        ? '❤️ Na Lista'
+                                        : '🤍 Adicionar à Lista'}
                                 </Button>
-                            )}
+                            </div>
                         </div>
 
                         <div>
@@ -174,7 +179,26 @@ export function MovieDetailPage() {
                         </div>
                     </div>
                 </div>
-
+                {/* Trailer */}
+                {trailer && (
+                    <div>
+                        <h2 className="text-xl font-semibold text-white mb-3">
+                            Trailer
+                        </h2>
+                        <div
+                            className="relative w-full rounded-lg overflow-hidden"
+                            style={{ paddingBottom: '56.25%' }}
+                        >
+                            <iframe
+                                className="absolute inset-0 w-full h-full"
+                                src={`https://www.youtube.com/embed/${trailer.key}`}
+                                title={`${movie.title} - Trailer`}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        </div>
+                    </div>
+                )}
                 {/* Cast */}
                 {cast.length > 0 && (
                     <div>

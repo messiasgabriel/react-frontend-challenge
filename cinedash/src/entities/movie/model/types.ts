@@ -13,7 +13,12 @@ export type Genre = {
     id: number;
     name: string;
 };
-
+export type MovieTrailerProps = {
+    videoKey: string;
+    title: string;
+    open: boolean;
+    onClose: () => void;
+};
 export type MoviesResponse = {
     page: number;
     results: Movie[];
