@@ -8,7 +8,7 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from '@/components/ui/card';
+} from '@/shared/ui/card';
 
 export const Route = createFileRoute('/login')({
     component: LoginPage,

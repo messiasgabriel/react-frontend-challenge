@@ -2,10 +2,22 @@ import { env } from '@/shared/config/env';
 
 const { TMDB_API_KEY, TMDB_BASE_URL } = env;
 
-export async function tmdbFetch<T>(endpoint: string): Promise<T> {
-    const url = `${TMDB_BASE_URL}${endpoint}`;
+export async function tmdbFetch<T>(
+    endpoint: string,
+    params?: Record<string, string | number | undefined>,
+): Promise<T> {
+    const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
+    url.searchParams.set('language', 'pt-BR');
 
-    const response = await fetch(url, {
+    if (params) {
+        for (const [key, value] of Object.entries(params)) {
+            if (value !== undefined) {
+                url.searchParams.set(key, String(value));
+            }
+        }
+    }
+
+    const response = await fetch(url.toString(), {
         headers: {
             Authorization: `Bearer ${TMDB_API_KEY}`,
             'Content-Type': 'application/json',

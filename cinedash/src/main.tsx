@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { Providers } from './app/providers.tsx';
-import { Toaster } from './components/ui/sonner.tsx';
+import { Toaster } from './shared/ui/sonner.tsx';
 import './app/styles/globals.css';
 
 // Import das rotas geradas automaticamente

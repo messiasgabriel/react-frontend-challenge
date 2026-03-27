@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchGenres } from '@/entities/genre/api/fetch-genres';
 import { useFiltersStore } from '../model/filters-store';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
+} from '@/shared/ui/select';
+import { Label } from '@/shared/ui/label';
 
 export function MovieFilters() {
     const {

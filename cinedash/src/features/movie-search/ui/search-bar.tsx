@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/shared/ui/input';
 import { useDebounce } from '@/shared/hooks/use-debounce';
 
 type SearchBarProps = {

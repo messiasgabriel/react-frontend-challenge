@@ -8,8 +8,8 @@ import {
 } from '@/entities/movie/api/fetch-movies';
 import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
 import { getImageUrl } from '@/entities/movie/lib/get-image-url';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 import { toast } from 'sonner';
 
 export const Route = createFileRoute('/movie/$movieId')({
@@ -164,16 +164,6 @@ export function MovieDetailPage() {
                                     ? '❤️ Na Lista'
                                     : '🤍 Adicionar à Lista'}
                             </Button>
-                            <div className="flex gap-3">
-                                <Button
-                                    onClick={handleToggleWatchlist}
-                                    className="gap-2"
-                                >
-                                    {inWatchlist
-                                        ? '❤️ Na Lista'
-                                        : '🤍 Adicionar à Lista'}
-                                </Button>
-                            </div>
                         </div>
 
                         <div>

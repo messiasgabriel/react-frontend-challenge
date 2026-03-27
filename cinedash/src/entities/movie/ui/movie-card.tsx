@@ -1,13 +1,12 @@
 import { Link } from '@tanstack/react-router';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
 import { getImageUrl } from '../lib/get-image-url';
-import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
-import type { Movie } from '../model/types';
+import { useWatchlistStore, type WatchlistMovie } from '@/features/watchlist/model/watchlist-store';
 import { toast } from 'sonner';
 
 type MovieCardProps = {
-    movie: Movie;
+    movie: WatchlistMovie;
 };
 
 export function MovieCard({ movie }: MovieCardProps) {

@@ -1,4 +1,9 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import {
+    createFileRoute,
+    Link,
+    redirect,
+    useNavigate,
+} from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useState, useCallback } from 'react';
 import { useAuthStore } from '@/features/auth/model/auth-store';
@@ -8,7 +13,7 @@ import {
     discoverMovies,
 } from '@/entities/movie/api/fetch-movies';
 import { useFiltersStore } from '@/features/movie-filters/model/filters-store';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { MovieCard } from '@/entities/movie/ui/movie-card';
 import { SearchBar } from '@/features/movie-search/ui/search-bar';
 import { MovieFilters } from '@/features/movie-filters/ui/movie-filters';
@@ -86,9 +91,27 @@ export function DashboardPage() {
             {/* Header */}
             <header className="bg-slate-900 border-b border-slate-800">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-white">
-                        🎬 CineDash
-                    </h1>
+                    <div className="flex items-center gap-4">
+                        <h1 className="text-2xl font-bold text-white">
+                            🎬 CineDash
+                        </h1>
+                        <nav className="flex gap-2">
+                            <Link to="/dashboard">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="bg-slate-800"
+                                >
+                                    Descobrir
+                                </Button>
+                            </Link>
+                            <Link to="/watchlist">
+                                <Button variant="ghost" size="sm">
+                                    Minha Lista
+                                </Button>
+                            </Link>
+                        </nav>
+                    </div>
                     <div className="flex items-center gap-4">
                         <span className="text-slate-400 text-sm">
                             {user?.email}
