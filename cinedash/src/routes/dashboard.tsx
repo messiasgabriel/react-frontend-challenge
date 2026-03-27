@@ -39,7 +39,6 @@ export function DashboardPage() {
     const { data, isLoading } = useQuery({
         queryKey: ['movies', searchQuery, genreId, year, minRating, page],
         queryFn: () => {
-            console.log('🔍 queryFn executando com page:', page);
             if (searchQuery) {
                 return searchMovies(searchQuery, page);
             }
@@ -51,15 +50,6 @@ export function DashboardPage() {
             return fetchPopularMovies(page);
         },
     });
-
-    console.log(
-        '📊 Query atual - page:',
-        page,
-        'isLoading:',
-        isLoading,
-        'total results:',
-        data?.total_results,
-    );
 
     const handleLogout = () => {
         logout();

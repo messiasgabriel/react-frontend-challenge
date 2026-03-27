@@ -1,5 +1,10 @@
 import { tmdbFetch } from './tmdb-client';
-import type { MoviesResponse } from '../model/types';
+import type {
+    CreditsResponse,
+    MovieDetails,
+    MoviesResponse,
+    VideosResponse,
+} from '../model/types';
 
 export async function fetchPopularMovies(page = 1): Promise<MoviesResponse> {
     return tmdbFetch<MoviesResponse>(`/movie/popular?page=${page}`);
@@ -50,4 +55,22 @@ export async function discoverMovies(
     return tmdbFetch<MoviesResponse>(
         `/discover/movie?${queryParams.toString()}`,
     );
+}
+
+export async function fetchMovieDetails(
+    movieId: number,
+): Promise<MovieDetails> {
+    return tmdbFetch<MovieDetails>(`/movie/${movieId}`);
+}
+
+export async function fetchMovieCredits(
+    movieId: number,
+): Promise<CreditsResponse> {
+    return tmdbFetch<CreditsResponse>(`/movie/${movieId}/credits`);
+}
+
+export async function fetchMovieVideos(
+    movieId: number,
+): Promise<VideosResponse> {
+    return tmdbFetch<VideosResponse>(`/movie/${movieId}/videos`);
 }

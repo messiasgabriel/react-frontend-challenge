@@ -2,9 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Movie } from '@/entities/movie/model/types';
 
+export type WatchlistMovie = Pick<
+    Movie,
+    'id' | 'title' | 'poster_path' | 'backdrop_path' | 'vote_average' | 'release_date' | 'overview'
+>;
+
 type WatchlistState = {
-    movies: Movie[];
-    addMovie: (movie: Movie) => void;
+    movies: WatchlistMovie[];
+    addMovie: (movie: WatchlistMovie) => void;
     removeMovie: (movieId: number) => void;
     isInWatchlist: (movieId: number) => boolean;
 };
