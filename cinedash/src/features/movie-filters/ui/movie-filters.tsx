@@ -31,9 +31,9 @@ export function MovieFilters() {
     const hasFilters = genreId || year || minRating;
 
     return (
-        <div className="bg-slate-900 rounded-lg p-6 space-y-4">
+        <div className="bg-card rounded-lg p-6 space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-white">Filtros</h3>
+                <h3 className="text-lg font-semibold text-foreground">Filtros</h3>
                 {hasFilters && (
                     <Button variant="ghost" size="sm" onClick={clearFilters}>
                         Limpar

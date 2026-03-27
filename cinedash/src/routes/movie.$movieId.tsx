@@ -49,16 +49,16 @@ export function MovieDetailPage() {
 
     if (isLoadingMovie) {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-                <p className="text-white text-xl">Carregando...</p>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <p className="text-foreground text-xl">Carregando...</p>
             </div>
         );
     }
 
     if (!movie) {
         return (
-            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-                <p className="text-white text-xl">Filme não encontrado</p>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <p className="text-foreground text-xl">Filme não encontrado</p>
             </div>
         );
     }
@@ -84,9 +84,9 @@ export function MovieDetailPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <header className="bg-slate-900 border-b border-slate-800">
+            <header className="bg-card border-b border-border">
                 <div className="container mx-auto px-4 py-4 flex items-center gap-4">
                     <Button
                         variant="ghost"
@@ -95,7 +95,7 @@ export function MovieDetailPage() {
                     >
                         ← Voltar
                     </Button>
-                    <h1 className="text-xl font-bold text-white">
+                    <h1 className="text-xl font-bold text-foreground">
                         Detalhes do Filme
                     </h1>
                 </div>
@@ -117,11 +117,11 @@ export function MovieDetailPage() {
                     {/* Info */}
                     <div className="space-y-6">
                         <div>
-                            <h1 className="text-4xl font-bold text-white mb-2">
+                            <h1 className="text-4xl font-bold text-foreground mb-2">
                                 {movie.title}
                             </h1>
                             {movie.tagline && (
-                                <p className="text-slate-400 italic">
+                                <p className="text-muted-foreground italic">
                                     {movie.tagline}
                                 </p>
                             )}
@@ -132,14 +132,14 @@ export function MovieDetailPage() {
                                 <span className="text-yellow-500 text-2xl">
                                     ⭐
                                 </span>
-                                <span className="text-white text-xl font-semibold">
+                                <span className="text-foreground text-xl font-semibold">
                                     {movie.vote_average.toFixed(1)}
                                 </span>
                             </div>
-                            <span className="text-slate-400">
+                            <span className="text-muted-foreground">
                                 {new Date(movie.release_date).getFullYear()}
                             </span>
-                            <span className="text-slate-400">
+                            <span className="text-muted-foreground">
                                 {movie.runtime} min
                             </span>
                         </div>
@@ -148,7 +148,7 @@ export function MovieDetailPage() {
                             {movie.genres.map((genre) => (
                                 <span
                                     key={genre.id}
-                                    className="px-3 py-1 bg-slate-800 text-slate-300 rounded-full text-sm"
+                                    className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm"
                                 >
                                     {genre.name}
                                 </span>
@@ -167,10 +167,10 @@ export function MovieDetailPage() {
                         </div>
 
                         <div>
-                            <h2 className="text-xl font-semibold text-white mb-2">
+                            <h2 className="text-xl font-semibold text-foreground mb-2">
                                 Sinopse
                             </h2>
-                            <p className="text-slate-300 leading-relaxed">
+                            <p className="text-muted-foreground leading-relaxed">
                                 {movie.overview}
                             </p>
                         </div>
@@ -179,7 +179,7 @@ export function MovieDetailPage() {
                 {/* Trailer */}
                 {trailer && (
                     <div>
-                        <h2 className="text-xl font-semibold text-white mb-3">
+                        <h2 className="text-xl font-semibold text-foreground mb-3">
                             Trailer
                         </h2>
                         <div
@@ -199,14 +199,14 @@ export function MovieDetailPage() {
                 {/* Cast */}
                 {cast.length > 0 && (
                     <div>
-                        <h2 className="text-2xl font-bold text-white mb-4">
+                        <h2 className="text-2xl font-bold text-foreground mb-4">
                             Elenco Principal
                         </h2>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                             {cast.map((actor) => (
                                 <Card
                                     key={actor.id}
-                                    className="bg-slate-900 border-slate-800"
+                                    className="bg-card border-border"
                                 >
                                     <CardContent className="p-4 text-center">
                                         {actor.profile_path ? (
@@ -219,16 +219,16 @@ export function MovieDetailPage() {
                                                 className="w-full aspect-2/3 object-cover rounded-lg mb-2"
                                             />
                                         ) : (
-                                            <div className="w-full aspect-2/3 bg-slate-800 rounded-lg mb-2 flex items-center justify-center">
+                                            <div className="w-full aspect-2/3 bg-muted rounded-lg mb-2 flex items-center justify-center">
                                                 <span className="text-4xl">
                                                     👤
                                                 </span>
                                             </div>
                                         )}
-                                        <p className="text-white font-medium text-sm">
+                                        <p className="text-foreground font-medium text-sm">
                                             {actor.name}
                                         </p>
-                                        <p className="text-slate-400 text-xs">
+                                        <p className="text-muted-foreground text-xs">
                                             {actor.character}
                                         </p>
                                     </CardContent>

@@ -8,6 +8,7 @@ import { useAuthStore } from '@/features/auth/model/auth-store';
 import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
 import { Button } from '@/shared/ui/button';
 import { WatchlistTable } from '@/features/watchlist/ui/watchlist-table';
+import { ThemeToggle } from '@/features/theme/ui/theme-toggle';
 
 export const Route = createFileRoute('/watchlist')({
     beforeLoad: () => {
@@ -34,12 +35,12 @@ export function WatchlistPage() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <header className="bg-slate-900 border-b border-slate-800">
+            <header className="bg-card border-b border-border">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-2xl font-bold text-white">
+                        <h1 className="text-2xl font-bold text-foreground">
                             🎬 CineDash
                         </h1>
                         <nav className="flex gap-2">
@@ -52,7 +53,7 @@ export function WatchlistPage() {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="bg-slate-800"
+                                    className="bg-muted"
                                 >
                                     Minha Lista
                                 </Button>
@@ -60,7 +61,8 @@ export function WatchlistPage() {
                         </nav>
                     </div>
                     <div className="flex items-center gap-4">
-                        <span className="text-slate-400 text-sm">
+                        <ThemeToggle />
+                        <span className="text-muted-foreground text-sm">
                             {user?.email}
                         </span>
                         <Button
@@ -77,10 +79,10 @@ export function WatchlistPage() {
             {/* Content */}
             <main className="container mx-auto px-4 py-8">
                 <div className="mb-6">
-                    <h2 className="text-3xl font-bold text-white mb-2">
+                    <h2 className="text-3xl font-bold text-foreground mb-2">
                         Minha Lista
                     </h2>
-                    <p className="text-slate-400">
+                    <p className="text-muted-foreground">
                         {movies.length}{' '}
                         {movies.length === 1 ? 'filme' : 'filmes'} salvos
                     </p>
@@ -89,10 +91,10 @@ export function WatchlistPage() {
                 {movies.length === 0 ? (
                     <div className="text-center py-12">
                         <div className="text-6xl mb-4">📽️</div>
-                        <h3 className="text-xl font-semibold text-white mb-2">
+                        <h3 className="text-xl font-semibold text-foreground mb-2">
                             Sua lista está vazia
                         </h3>
-                        <p className="text-slate-400 mb-6">
+                        <p className="text-muted-foreground mb-6">
                             Adicione filmes à sua lista para assistir depois
                         </p>
                         <Link to="/dashboard">

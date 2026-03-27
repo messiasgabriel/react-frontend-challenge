@@ -51,7 +51,7 @@ export function WatchlistTable() {
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
-                    className="hover:bg-slate-800"
+                    className="hover:bg-muted"
                 >
                     Título
                     {column.getIsSorted() === 'asc' && ' ↑'}
@@ -62,7 +62,7 @@ export function WatchlistTable() {
                 <Link
                     to="/movie/$movieId"
                     params={{ movieId: row.original.id.toString() }}
-                    className="text-white hover:text-blue-400 font-medium transition-colors"
+                    className="text-foreground hover:text-primary font-medium transition-colors"
                 >
                     {row.original.title}
                 </Link>
@@ -76,7 +76,7 @@ export function WatchlistTable() {
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
-                    className="hover:bg-slate-800"
+                    className="hover:bg-muted"
                 >
                     Ano
                     {column.getIsSorted() === 'asc' && ' ↑'}
@@ -87,7 +87,7 @@ export function WatchlistTable() {
                 const year = row.original.release_date
                     ? new Date(row.original.release_date).getFullYear()
                     : 'N/A';
-                return <span className="text-slate-300">{year}</span>;
+                return <span className="text-muted-foreground">{year}</span>;
             },
         },
         {
@@ -98,7 +98,7 @@ export function WatchlistTable() {
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
-                    className="hover:bg-slate-800"
+                    className="hover:bg-muted"
                 >
                     Nota
                     {column.getIsSorted() === 'asc' && ' ↑'}
@@ -108,7 +108,7 @@ export function WatchlistTable() {
             cell: ({ row }) => (
                 <div className="flex items-center gap-1">
                     <span className="text-yellow-500">⭐</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-foreground font-semibold">
                         {row.original.vote_average.toFixed(1)}
                     </span>
                 </div>
@@ -142,16 +142,16 @@ export function WatchlistTable() {
     });
 
     return (
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-card border-border">
             <div className="overflow-x-auto">
                 <table className="w-full">
                     <thead>
-                        <tr className="border-b border-slate-800">
+                        <tr className="border-b border-border">
                             {table.getHeaderGroups().map((headerGroup) =>
                                 headerGroup.headers.map((header) => (
                                     <th
                                         key={header.id}
-                                        className="px-4 py-3 text-left text-sm font-semibold text-slate-300"
+                                        className="px-4 py-3 text-left text-sm font-semibold text-muted-foreground"
                                     >
                                         {header.isPlaceholder
                                             ? null
@@ -169,7 +169,7 @@ export function WatchlistTable() {
                         {table.getRowModel().rows.map((row) => (
                             <tr
                                 key={row.id}
-                                className="border-b border-slate-800 hover:bg-slate-800/50 transition-colors"
+                                className="border-b border-border hover:bg-muted/50 transition-colors"
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <td key={cell.id} className="px-4 py-4">

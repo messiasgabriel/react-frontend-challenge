@@ -18,6 +18,7 @@ import { MovieCard } from '@/entities/movie/ui/movie-card';
 import { SearchBar } from '@/features/movie-search/ui/search-bar';
 import { MovieFilters } from '@/features/movie-filters/ui/movie-filters';
 import { MovieCardSkeleton } from '@/entities/movie/ui/movie-card-skeleton';
+import { ThemeToggle } from '@/features/theme/ui/theme-toggle';
 
 export const Route = createFileRoute('/dashboard')({
     beforeLoad: () => {
@@ -87,12 +88,12 @@ export function DashboardPage() {
     const canGoPrev = page > 1;
 
     return (
-        <div className="min-h-screen bg-slate-950">
+        <div className="min-h-screen bg-background">
             {/* Header */}
-            <header className="bg-slate-900 border-b border-slate-800">
+            <header className="bg-card border-b border-border">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <h1 className="text-2xl font-bold text-white">
+                        <h1 className="text-2xl font-bold text-foreground">
                             🎬 CineDash
                         </h1>
                         <nav className="flex gap-2">
@@ -100,7 +101,7 @@ export function DashboardPage() {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="bg-slate-800"
+                                    className="bg-muted"
                                 >
                                     Descobrir
                                 </Button>
@@ -113,7 +114,8 @@ export function DashboardPage() {
                         </nav>
                     </div>
                     <div className="flex items-center gap-4">
-                        <span className="text-slate-400 text-sm">
+                        <ThemeToggle />
+                        <span className="text-muted-foreground text-sm">
                             {user?.email}
                         </span>
                         <Button
@@ -139,7 +141,7 @@ export function DashboardPage() {
 
                 {/* Title */}
                 <div className="flex items-center justify-between">
-                    <h2 className="text-3xl font-bold text-white">
+                    <h2 className="text-3xl font-bold text-foreground">
                         {searchQuery
                             ? `Resultados para "${searchQuery}"`
                             : hasFilters
@@ -147,7 +149,7 @@ export function DashboardPage() {
                               : 'Filmes Populares'}
                     </h2>
                     {data && !isLoading && (
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-muted-foreground text-sm">
                             Página {page} de {data.total_pages}
                         </p>
                     )}
@@ -155,7 +157,7 @@ export function DashboardPage() {
 
                 {/* Results count */}
                 {data && !isLoading && (
-                    <p className="text-slate-400">
+                    <p className="text-muted-foreground">
                         {data.total_results}{' '}
                         {data.total_results === 1 ? 'resultado' : 'resultados'}
                     </p>
@@ -174,7 +176,7 @@ export function DashboardPage() {
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                             {data?.results.length === 0 ? (
                                 <div className="col-span-full text-center py-12">
-                                    <p className="text-slate-400 text-lg">
+                                    <p className="text-muted-foreground text-lg">
                                         Nenhum filme encontrado
                                     </p>
                                 </div>
@@ -196,7 +198,7 @@ export function DashboardPage() {
                                     ← Anterior
                                 </Button>
 
-                                <span className="text-slate-400 text-sm">
+                                <span className="text-muted-foreground text-sm">
                                     Página {page} de {data.total_pages}
                                 </span>
 
