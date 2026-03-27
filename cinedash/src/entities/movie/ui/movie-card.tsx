@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { getImageUrl } from '../lib/get-image-url';
 import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
 import type { Movie } from '../model/types';
+import { toast } from 'sonner';
 
 type MovieCardProps = {
     movie: Movie;
@@ -22,8 +23,14 @@ export function MovieCard({ movie }: MovieCardProps) {
         e.stopPropagation();
         if (inWatchlist) {
             removeMovie(movie.id);
+            toast.success('Removido da lista', {
+                description: `${movie.title} foi removido da sua watchlist`,
+            });
         } else {
             addMovie(movie);
+            toast.success('Adicionado à lista', {
+                description: `${movie.title} foi adicionado à sua watchlist`,
+            });
         }
     };
 

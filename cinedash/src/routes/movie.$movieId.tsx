@@ -10,6 +10,7 @@ import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
 import { getImageUrl } from '@/entities/movie/lib/get-image-url';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/movie/$movieId')({
     beforeLoad: () => {
@@ -71,8 +72,14 @@ export function MovieDetailPage() {
     const handleToggleWatchlist = () => {
         if (inWatchlist) {
             removeMovie(movie.id);
+            toast.success('Removido da lista', {
+                description: `${movie.title} foi removido da sssua watchlist`,
+            });
         } else {
             addMovie(movie);
+            toast.success('Adicionado à lista', {
+                description: `${movie.title} foi adicionado à sua watchlist`,
+            });
         }
     };
 
