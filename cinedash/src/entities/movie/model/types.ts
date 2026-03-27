@@ -8,7 +8,12 @@ export type Movie = {
     release_date: string;
     genre_ids: number[];
 };
-
+export type DiscoverParams = {
+    page?: number;
+    genreId?: number | null;
+    year?: number | null;
+    minRating?: number | null;
+};
 export type Genre = {
     id: number;
     name: string;

@@ -1,6 +1,7 @@
-import { tmdbFetch } from './tmdb-client';
+import { tmdbFetch } from '@/shared/api/tmdb-client';
 import type {
     CreditsResponse,
+    DiscoverParams,
     MovieDetails,
     MoviesResponse,
     VideosResponse,
@@ -22,13 +23,6 @@ export async function searchMovies(
         `/search/movie?query=${encodeURIComponent(query)}&page=${page}`,
     );
 }
-
-type DiscoverParams = {
-    page?: number;
-    genreId?: number | null;
-    year?: number | null;
-    minRating?: number | null;
-};
 
 export async function discoverMovies(
     params: DiscoverParams = {},

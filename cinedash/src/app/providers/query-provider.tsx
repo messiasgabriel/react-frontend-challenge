@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { ErrorBoundary } from '@/shared/ui/error-boundary';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -12,11 +13,15 @@ const queryClient = new QueryClient({
     },
 });
 
+export { queryClient };
+
 export function Providers({ children }: { children: ReactNode }) {
     return (
-        <QueryClientProvider client={queryClient}>
-            {children}
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <ErrorBoundary>
+            <QueryClientProvider client={queryClient}>
+                {children}
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </ErrorBoundary>
     );
 }

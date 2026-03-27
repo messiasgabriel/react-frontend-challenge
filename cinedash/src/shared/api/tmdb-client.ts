@@ -1,6 +1,6 @@
-import { env } from '@/shared/config/env';
-
 const { TMDB_API_KEY, TMDB_BASE_URL } = env;
+import { env } from '@/shared/config/env';
+import { ApiError } from './api-error';
 
 export async function tmdbFetch<T>(
     endpoint: string,
@@ -25,8 +25,8 @@ export async function tmdbFetch<T>(
     });
 
     if (!response.ok) {
-        throw new Error(`TMDB API Error: ${response.statusText}`);
+        throw new ApiError(response.status, response.statusText);
     }
 
-    return response.json();
+    return response.json() as Promise<T>;
 }
