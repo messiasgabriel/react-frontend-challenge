@@ -1,5 +1,5 @@
 import { tmdbFetch } from './tmdb-client';
-import type { MoviesResponse } from '../model/type';
+import type { MoviesResponse } from '../model/types';
 
 export async function fetchPopularMovies(page = 1): Promise<MoviesResponse> {
     return tmdbFetch<MoviesResponse>(`/movie/popular?page=${page}`);

@@ -1,17 +1,42 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { getImageUrl } from '../lib/get-image-url';
-import type { Movie } from '../model/type';
+import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
+import type { Movie } from '../model/types';
 
 type MovieCardProps = {
     movie: Movie;
 };
 
 export function MovieCard({ movie }: MovieCardProps) {
+    const { addMovie, removeMovie, isInWatchlist } = useWatchlistStore();
+    const inWatchlist = isInWatchlist(movie.id);
+
     const year = movie.release_date
         ? new Date(movie.release_date).getFullYear()
         : 'N/A';
+
+    const handleToggleWatchlist = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (inWatchlist) {
+            removeMovie(movie.id);
+        } else {
+            addMovie(movie);
+        }
+    };
+
     return (
-        <Card className="group overflow-hidden bg-slate-900 border-slate-800 transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20">
+        <Card className="group relative overflow-hidden bg-slate-900 border-slate-800 transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20">
+            {/* Watchlist Button */}
+            <Button
+                size="icon"
+                variant={inWatchlist ? 'default' : 'secondary'}
+                className="absolute top-2 right-2 z-10 h-8 w-8"
+                onClick={handleToggleWatchlist}
+            >
+                {inWatchlist ? '❤️' : '🤍'}
+            </Button>
+
             <img
                 src={getImageUrl(movie.poster_path)}
                 alt={movie.title}
