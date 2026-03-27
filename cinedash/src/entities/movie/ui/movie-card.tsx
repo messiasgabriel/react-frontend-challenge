@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { getImageUrl } from '../lib/get-image-url';
-import { useWatchlistStore, type WatchlistMovie } from '@/features/watchlist/model/watchlist-store';
+import { useWatchlistStore, type WatchlistMovie } from '@/features/watchlist';
 import { toast } from 'sonner';
 
 type MovieCardProps = {

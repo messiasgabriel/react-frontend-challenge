@@ -1,44 +1,66 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createToken, verifyToken } from '../api/fake-auth';
+import { setCookie, getCookie, deleteCookie } from '@/shared/lib/cookies';
+import type { LoginFormData } from './auth-schema';
 
-type AuthState = {
+export interface AuthUser {
+    email: string;
+    name: string;
+}
+
+interface AuthStore {
+    user: AuthUser | null;
     isAuthenticated: boolean;
-    token: string | null;
-    user: {
-        email: string;
-    } | null;
-    login: (email: string, password: string) => void;
+    isLoading: boolean;
+
+    login: (data: LoginFormData) => Promise<void>;
     logout: () => void;
-};
+    restoreSession: () => Promise<void>;
+}
 
-export const useAuthStore = create<AuthState>()(
-    persist(
-        (set) => ({
-            isAuthenticated: false,
-            token: null,
-            user: null,
+export const useAuthStore = create<AuthStore>()((set) => ({
+    user: null,
+    isAuthenticated: false,
+    isLoading: true,
 
-            login: (email, password) => {
-                // Simular autenticação sem backend
-                const fakeToken = btoa(`${email}:${password}:${Date.now()}`);
+    login: async (data) => {
+        const token = await createToken(data.email);
+        setCookie(token, 86400); // 24h
 
-                set({
-                    isAuthenticated: true,
-                    token: fakeToken,
-                    user: { email },
-                });
-            },
+        const name = data.email.split('@')[0];
+        set({
+            user: { email: data.email, name },
+            isAuthenticated: true,
+            isLoading: false,
+        });
+    },
 
-            logout: () => {
-                set({
-                    isAuthenticated: false,
-                    token: null,
-                    user: null,
-                });
-            },
-        }),
-        {
-            name: 'auth-storage',
-        },
-    ),
-);
+    logout: () => {
+        deleteCookie();
+        set({ user: null, isAuthenticated: false, isLoading: false });
+    },
+
+    restoreSession: async () => {
+        set({ isLoading: true });
+        const token = getCookie();
+
+        if (!token) {
+            set({ user: null, isAuthenticated: false, isLoading: false });
+            return;
+        }
+
+        const payload = await verifyToken(token);
+
+        if (!payload) {
+            deleteCookie();
+            set({ user: null, isAuthenticated: false, isLoading: false });
+            return;
+        }
+
+        set({
+            user: { email: payload.email, name: payload.name },
+            isAuthenticated: true,
+            isLoading: false,
+        });
+    },
+}));

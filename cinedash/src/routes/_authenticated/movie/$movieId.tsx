@@ -1,27 +1,17 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '@/features/auth/model/auth-store';
 import {
     fetchMovieDetails,
     fetchMovieCredits,
     fetchMovieVideos,
-} from '@/entities/movie/api/fetch-movies';
-import { useWatchlistStore } from '@/features/watchlist/model/watchlist-store';
-import { getImageUrl } from '@/entities/movie/lib/get-image-url';
+    getImageUrl,
+} from '@/entities/movie';
+import { useWatchlistStore } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { toast } from 'sonner';
 
-export const Route = createFileRoute('/movie/$movieId')({
-    beforeLoad: () => {
-        const { isAuthenticated } = useAuthStore.getState();
-
-        if (!isAuthenticated) {
-            throw redirect({
-                to: '/login',
-            });
-        }
-    },
+export const Route = createFileRoute('/_authenticated/movie/$movieId')({
     component: MovieDetailPage,
 });
 
@@ -49,7 +39,7 @@ export function MovieDetailPage() {
 
     if (isLoadingMovie) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
+            <div className="flex items-center justify-center py-24">
                 <p className="text-foreground text-xl">Carregando...</p>
             </div>
         );
@@ -57,7 +47,7 @@ export function MovieDetailPage() {
 
     if (!movie) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
+            <div className="flex items-center justify-center py-24">
                 <p className="text-foreground text-xl">Filme não encontrado</p>
             </div>
         );
@@ -84,8 +74,8 @@ export function MovieDetailPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Header */}
+        <div>
+            {/* Sub-header */}
             <header className="bg-card border-b border-border">
                 <div className="container mx-auto px-4 py-4 flex items-center gap-4">
                     <Button

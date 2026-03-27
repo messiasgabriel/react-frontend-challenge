@@ -1,21 +1,20 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { NotFoundPage } from './404';
+import { createRootRouteWithContext } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { QueryProvider } from '@/app/providers/query-provider';
+import { ThemeProvider } from '@/app/providers/theme-provider';
+import { RootLayout } from '@/app/layouts/root-layout';
 
-export const Route = createRootRoute({
-    component: RootComponent,
-    notFoundComponent: NotFoundPage,
-});
-
-export function RootComponent() {
-    return (
-        <>
-            <div className="min-h-screen bg-background">
-                <Outlet />
-            </div>
-            {import.meta.env.DEV && (
-                <TanStackRouterDevtools position="bottom-right" />
-            )}
-        </>
-    );
+export interface RouterContext {
+    isAuthenticated: boolean;
 }
+
+export const Route = createRootRouteWithContext<RouterContext>()({
+    component: () => (
+        <QueryProvider>
+            <ThemeProvider>
+                <RootLayout />
+                <TanStackRouterDevtools />
+            </ThemeProvider>
+        </QueryProvider>
+    ),
+});

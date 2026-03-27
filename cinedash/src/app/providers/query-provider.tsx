@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
 
 export { queryClient };
 
-export function Providers({ children }: { children: ReactNode }) {
+export function QueryProvider({ children }: { children: ReactNode }) {
     return (
         <ErrorBoundary>
             <QueryClientProvider client={queryClient}>

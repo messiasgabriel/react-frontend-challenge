@@ -23,7 +23,7 @@ export function LoginForm() {
         // Simular delay de autenticação
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        login(data.email, data.password);
+        login(data);
         navigate({ to: '/dashboard' });
     };
 

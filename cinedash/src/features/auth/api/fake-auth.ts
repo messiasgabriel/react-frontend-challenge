@@ -1,0 +1,52 @@
+import { SignJWT, jwtVerify } from 'jose';
+
+export interface JwtPayload {
+    sub: string;
+    email: string;
+    name: string;
+    iss?: string;
+    aud?: string;
+    iat?: number;
+    exp?: number;
+}
+
+function getSecret(): Uint8Array {
+    return new TextEncoder().encode(
+        import.meta.env.VITE_JWT_SECRET ||
+            'cinedash-dev-secret-key-min-32-chars!',
+    );
+}
+
+export async function createToken(email: string): Promise<string> {
+    const name = email.split('@')[0];
+
+    return new SignJWT({ email, name } as unknown as Record<string, unknown>)
+        .setProtectedHeader({ alg: 'HS256' })
+        .setSubject(email)
+        .setIssuer('cinedash')
+        .setAudience('cinedash-app')
+        .setIssuedAt()
+        .setExpirationTime('24h')
+        .sign(getSecret());
+}
+
+export async function verifyToken(token: string): Promise<JwtPayload | null> {
+    try {
+        const { payload } = await jwtVerify(token, getSecret(), {
+            issuer: 'cinedash',
+            audience: 'cinedash-app',
+        });
+
+        return {
+            sub: payload.sub ?? '',
+            email: (payload as Record<string, unknown>).email as string,
+            name: (payload as Record<string, unknown>).name as string,
+            iss: payload.iss,
+            aud: payload.aud as string | undefined,
+            iat: payload.iat,
+            exp: payload.exp,
+        };
+    } catch {
+        return null;
+    }
+}

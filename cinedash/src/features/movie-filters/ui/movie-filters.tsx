@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchGenres } from '@/entities/genre/api/fetch-genres';
+import { fetchGenres } from '@/entities/movie/api/fetch-movies';
 import { useFiltersStore } from '../model/filters-store';
 import { Button } from '@/shared/ui/button';
 import {
@@ -33,7 +33,9 @@ export function MovieFilters() {
     return (
         <div className="bg-card rounded-lg p-6 space-y-4">
             <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-foreground">Filtros</h3>
+                <h3 className="text-lg font-semibold text-foreground">
+                    Filtros
+                </h3>
                 {hasFilters && (
                     <Button variant="ghost" size="sm" onClick={clearFilters}>
                         Limpar

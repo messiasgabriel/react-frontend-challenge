@@ -11,7 +11,7 @@ import { Link } from '@tanstack/react-router';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
-import { getImageUrl } from '@/entities/movie/lib/get-image-url';
+import { getImageUrl } from '@/entities/movie';
 import { useWatchlistStore, WatchlistMovie } from '../model/watchlist-store';
 
 export function WatchlistTable() {

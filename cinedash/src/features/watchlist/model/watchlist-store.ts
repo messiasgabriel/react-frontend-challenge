@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Movie } from '@/entities/movie/model/types';
+import type { Movie } from '@/entities/movie';
 
 export type WatchlistMovie = Pick<
     Movie,

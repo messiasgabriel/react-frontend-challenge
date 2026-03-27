@@ -2,6 +2,7 @@ import { tmdbFetch } from '@/shared/api/tmdb-client';
 import type {
     CreditsResponse,
     DiscoverParams,
+    GenresResponse,
     MovieDetails,
     MoviesResponse,
     VideosResponse,
@@ -67,4 +68,8 @@ export async function fetchMovieVideos(
     movieId: number,
 ): Promise<VideosResponse> {
     return tmdbFetch<VideosResponse>(`/movie/${movieId}/videos`);
+}
+
+export async function fetchGenres(): Promise<GenresResponse> {
+    return tmdbFetch<GenresResponse>('/genre/movie/list');
 }

@@ -6,23 +6,15 @@
 ```
 src/
 ├── app/
-│   ├── providers.tsx
+│   ├── layouts/
+│   │   ├── auth-layout.tsx
+│   │   ├── dashboard-layout.tsx
+│   │   └── root-layout.tsx
+│   ├── providers/
+│   │   ├── query-provider.tsx
+│   │   └── theme-provider.tsx
 │   └── styles/
 │       └── globals.css
-├── assets/
-│   ├── hero.png
-│   ├── react.svg
-│   └── vite.svg
-├── components/
-│   └── ui/
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── dialog.tsx
-│       ├── input.tsx
-│       ├── label.tsx
-│       ├── select.tsx
-│       ├── skeleton.tsx
-│       └── sonner.tsx
 ├── entities/
 │   ├── genre/
 │   │   ├── api/
@@ -31,53 +23,82 @@ src/
 │   │       └── types.ts
 │   └── movie/
 │       ├── api/
-│       │   ├── fetch-movies.ts
-│       │   └── tmdb-client.ts
+│       │   └── fetch-movies.ts
 │       ├── lib/
 │       │   └── get-image-url.ts
 │       ├── model/
 │       │   └── types.ts
-│       └── ui/
-│           ├── movie-card-skeleton.tsx
-│           ├── movie-card.tsx
-│           └── movie-trailer.tsx
+│       ├── ui/
+│       │   ├── movie-card-skeleton.tsx
+│       │   └── movie-card.tsx
+│       └── index.ts
 ├── features/
 │   ├── auth/
-│   │   ├── lib/
+│   │   ├── api/
+│   │   │   └── fake-auth.ts
 │   │   ├── model/
 │   │   │   ├── auth-schema.ts
 │   │   │   └── auth-store.ts
-│   │   └── ui/
-│   │       └── login-form.tsx
+│   │   ├── ui/
+│   │   │   └── login-form.tsx
+│   │   └── index.ts
 │   ├── movie-filters/
 │   │   ├── model/
 │   │   │   └── filters-store.ts
-│   │   └── ui/
-│   │       └── movie-filters.tsx
+│   │   ├── ui/
+│   │   │   └── movie-filters.tsx
+│   │   └── index.ts
 │   ├── movie-search/
+│   │   ├── ui/
+│   │   │   └── search-bar.tsx
+│   │   └── index.ts
+│   ├── theme/
 │   │   ├── model/
-│   │   └── ui/
-│   │       └── search-bar.tsx
+│   │   │   └── theme-store.ts
+│   │   ├── ui/
+│   │   │   └── theme-toggle.tsx
+│   │   └── index.ts
 │   └── watchlist/
-│       └── model/
-│           └── watchlist-store.ts
-├── lib/
-│   └── utils.ts
+│       ├── model/
+│       │   └── watchlist-store.ts
+│       ├── ui/
+│       │   └── watchlist-table.tsx
+│       └── index.ts
 ├── routes/
+│   ├── _authenticated/
+│   │   ├── movie/
+│   │   │   └── $movieId.tsx
+│   │   ├── dashboard.tsx
+│   │   └── watchlist.tsx
 │   ├── __root.tsx
-│   ├── dashboard.tsx
+│   ├── _authenticated.tsx
+│   ├── 404.tsx
 │   ├── index.tsx
-│   ├── login.tsx
-│   └── movie.$movieId.tsx
+│   └── login.tsx
 ├── shared/
 │   ├── api/
+│   │   ├── api-error.ts
+│   │   └── tmdb-client.ts
 │   ├── config/
 │   │   └── env.ts
 │   ├── hooks/
 │   │   └── use-debounce.ts
 │   ├── lib/
+│   │   ├── cookies.ts
+│   │   └── utils.ts
 │   └── ui/
-├── tests/
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── dialog.tsx
+│       ├── error-boundary.tsx
+│       ├── error-fallback.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── select.tsx
+│       ├── skeleton.tsx
+│       └── sonner.tsx
+├── App.tsx
 ├── main.tsx
+├── router.ts
 └── routeTree.gen.ts
 ```
