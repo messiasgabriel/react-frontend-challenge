@@ -1,6 +1,6 @@
 # File Tree: src
 
-**Generated:** 3/27/2026
+**Generated:** 3/28/2026
 **Root Path:** `src/`
 
 ```
@@ -16,11 +16,6 @@ src/
 │   └── styles/
 │       └── globals.css
 ├── entities/
-│   ├── genre/
-│   │   ├── api/
-│   │   │   └── fetch-genres.ts
-│   │   └── model/
-│   │       └── types.ts
 │   └── movie/
 │       ├── api/
 │       │   └── fetch-movies.ts

@@ -1,50 +1,27 @@
+import { type ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Card, CardContent } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
 import { getImageUrl } from '../lib/get-image-url';
-import { useWatchlistStore, type WatchlistMovie } from '@/features/watchlist';
-import { toast } from 'sonner';
+import type { Movie } from '../model/types';
 
 type MovieCardProps = {
-    movie: WatchlistMovie;
+    movie: Movie;
+    action?: ReactNode;
 };
 
-export function MovieCard({ movie }: MovieCardProps) {
-    const { addMovie, removeMovie, isInWatchlist } = useWatchlistStore();
-    const inWatchlist = isInWatchlist(movie.id);
-
+export function MovieCard({ movie, action }: MovieCardProps) {
     const year = movie.release_date
         ? new Date(movie.release_date).getFullYear()
         : 'N/A';
 
-    const handleToggleWatchlist = (e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (inWatchlist) {
-            removeMovie(movie.id);
-            toast.success('Removido da lista', {
-                description: `${movie.title} foi removido da sua watchlist`,
-            });
-        } else {
-            addMovie(movie);
-            toast.success('Adicionado à lista', {
-                description: `${movie.title} foi adicionado à sua watchlist`,
-            });
-        }
-    };
-
     return (
         <Link to="/movie/$movieId" params={{ movieId: String(movie.id) }}>
             <Card className="group relative overflow-hidden bg-card border-border transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-xl hover:shadow-primary/20">
-                {/* Watchlist Button */}
-                <Button
-                    size="icon"
-                    variant={inWatchlist ? 'default' : 'secondary'}
-                    className="absolute top-2 right-2 z-10 h-8 w-8"
-                    onClick={handleToggleWatchlist}
-                >
-                    {inWatchlist ? '❤️' : '🤍'}
-                </Button>
+                {action && (
+                    <div className="absolute top-2 right-2 z-10">
+                        {action}
+                    </div>
+                )}
 
                 <img
                     src={getImageUrl(movie.poster_path)}

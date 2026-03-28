@@ -18,7 +18,6 @@ export function LoginPage() {
     const navigate = useNavigate();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-    // Se já está autenticado, redireciona pro dashboard
     useEffect(() => {
         if (isAuthenticated) {
             navigate({ to: '/dashboard' });
@@ -43,10 +42,6 @@ export function LoginPage() {
                         <LoginForm />
                     </CardContent>
                 </Card>
-
-                <p className="text-center text-sm text-muted-foreground">
-                    Qualquer email/senha válidos funcionam (auth simulada)
-                </p>
             </div>
         </AuthLayout>
     );

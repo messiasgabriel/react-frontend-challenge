@@ -10,6 +10,7 @@ import {
 } from '@/entities/movie';
 import { useFiltersStore, MovieFilters } from '@/features/movie-filters';
 import { SearchBar } from '@/features/movie-search';
+import { WatchlistToggleButton } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
@@ -115,7 +116,11 @@ export function DashboardPage() {
                             </div>
                         ) : (
                             data?.results.map((movie) => (
-                                <MovieCard key={movie.id} movie={movie} />
+                                <MovieCard
+                                    key={movie.id}
+                                    movie={movie}
+                                    action={<WatchlistToggleButton movie={movie} />}
+                                />
                             ))
                         )}
                     </div>
