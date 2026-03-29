@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useSearch } from '@tanstack/react-router';
 import { loginSchema, type LoginFormData } from '../model/auth-schema';
 import { useAuthStore } from '../model/auth-store';
 import { Button } from '@/shared/ui/button';
@@ -10,6 +10,7 @@ import { Label } from '@/shared/ui/label';
 
 export function LoginForm() {
     const navigate = useNavigate();
+    const { redirect } = useSearch({ from: '/login' });
     const login = useAuthStore((state) => state.login);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -25,7 +26,11 @@ export function LoginForm() {
         setSubmitError(null);
         try {
             await login(data);
-            navigate({ to: '/dashboard' });
+            if (redirect) {
+                navigate({ to: redirect as '/' });
+            } else {
+                navigate({ to: '/dashboard', search: { page: 1 } });
+            }
         } catch {
             setSubmitError('Credenciais inválidas. Tente novamente.');
         }

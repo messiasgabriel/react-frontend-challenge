@@ -7,17 +7,21 @@ import {
     type ColumnDef,
 } from '@tanstack/react-table';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { XCircle, Film } from 'lucide-react';
+import { XCircle, Film, Star } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
-import { getImageUrl } from '@/entities/movie';
+import { getImageUrl, genresQueryOptions } from '@/entities/movie';
 import type { WatchlistMovie } from '@/entities/movie';
 import { useWatchlistStore } from '../model/watchlist-store';
 
+type Genre = { id: number; name: string };
+
 function createWatchlistColumns(
     onRemove: (movie: WatchlistMovie) => void,
+    genres: Genre[],
 ): ColumnDef<WatchlistMovie>[] {
     return [
         {
@@ -69,6 +73,23 @@ function createWatchlistColumns(
             ),
         },
         {
+            accessorKey: 'genre_ids',
+            header: 'Gênero',
+            enableSorting: false,
+            cell: ({ row }) => {
+                const names = (row.original.genre_ids ?? [])
+                    .slice(0, 2)
+                    .map((id) => genres.find((g) => g.id === id)?.name)
+                    .filter(Boolean)
+                    .join(', ');
+                return (
+                    <span className="text-muted-foreground text-sm">
+                        {names || '—'}
+                    </span>
+                );
+            },
+        },
+        {
             accessorKey: 'release_date',
             header: ({ column }) => (
                 <Button
@@ -107,7 +128,7 @@ function createWatchlistColumns(
             ),
             cell: ({ row }) => (
                 <div className="flex items-center gap-1">
-                    <span className="text-yellow-500">⭐</span>
+                    <Star className="size-5 fill-yellow-500 text-yellow-500" />
                     <span className="text-foreground font-semibold">
                         {row.original.vote_average.toFixed(1)}
                     </span>
@@ -132,9 +153,10 @@ function createWatchlistColumns(
 }
 
 export function WatchlistTable() {
-    'use no memo';
     const { movies, removeMovie } = useWatchlistStore();
     const [sorting, setSorting] = useState<SortingState>([]);
+    const { data: genresData } = useQuery(genresQueryOptions());
+    const genres = genresData?.genres ?? [];
 
     const handleRemove = (movie: WatchlistMovie) => {
         removeMovie(movie.id);
@@ -144,7 +166,7 @@ export function WatchlistTable() {
         });
     };
 
-    const columns = createWatchlistColumns(handleRemove);
+    const columns = createWatchlistColumns(handleRemove, genres);
 
     const table = useReactTable({
         data: movies,
@@ -170,7 +192,8 @@ export function WatchlistTable() {
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                  header.column.columnDef.header,
+                                                  header.column.columnDef
+                                                      .header,
                                                   header.getContext(),
                                               )}
                                     </th>

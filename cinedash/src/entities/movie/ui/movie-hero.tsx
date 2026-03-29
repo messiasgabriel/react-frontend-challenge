@@ -14,6 +14,7 @@ import type { Movie } from '../model/types';
 
 type MovieHeroProps = {
     movies: Movie[];
+    showActions?: boolean;
 };
 
 function HeroSkeleton() {
@@ -22,7 +23,7 @@ function HeroSkeleton() {
     );
 }
 
-export function MovieHero({ movies }: MovieHeroProps) {
+export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
 
@@ -107,22 +108,24 @@ export function MovieHero({ movies }: MovieHeroProps) {
                                         {movie.overview}
                                     </p>
 
-                                    <div className="flex items-center gap-2 pt-1">
-                                        <Link
-                                            to="/movie/$movieId"
-                                            params={{
-                                                movieId: String(movie.id),
-                                            }}
-                                        >
-                                            <Button
-                                                size="sm"
-                                                className="cursor-pointer"
+                                    {showActions && (
+                                        <div className="flex items-center gap-2 pt-1">
+                                            <Link
+                                                to="/movie/$movieId"
+                                                params={{
+                                                    movieId: String(movie.id),
+                                                }}
                                             >
-                                                Ver detalhes
-                                            </Button>
-                                        </Link>
-                                        <WatchlistToggle movie={movie} />
-                                    </div>
+                                                <Button
+                                                    size="sm"
+                                                    className="cursor-pointer"
+                                                >
+                                                    Ver detalhes
+                                                </Button>
+                                            </Link>
+                                            <WatchlistToggle movie={movie} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </CarouselItem>

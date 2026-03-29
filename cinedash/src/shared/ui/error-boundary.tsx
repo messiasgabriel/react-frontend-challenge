@@ -31,7 +31,7 @@ export class ErrorBoundary extends Component<
     resetError = () => {
         this.setState({ hasError: false, error: null });
         this.props.onReset?.();
-        window.location.href = '/dashboard';
+        window.location.href = '/dashboard?page=1';
     };
 
     render() {

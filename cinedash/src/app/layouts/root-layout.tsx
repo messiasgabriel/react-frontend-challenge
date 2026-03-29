@@ -1,11 +1,13 @@
 import { Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Toaster } from '@/shared/ui/sonner';
+import { Footer } from '@/shared/ui/footer';
 
 export function RootLayout() {
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="flex min-h-screen flex-col bg-background text-foreground">
             <Outlet />
+            <Footer />
             <Toaster
                 richColors
                 position="bottom-right"

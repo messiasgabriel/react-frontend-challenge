@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Film } from 'lucide-react';
+import { Film, Star } from 'lucide-react';
 import { Card, CardContent } from '@/shared/ui/card';
 import { getImageUrl } from '../lib/get-image-url';
 import type { Movie } from '../model/types';
@@ -17,11 +17,9 @@ export function MovieCard({ movie, action }: MovieCardProps) {
 
     return (
         <Link to="/movie/$movieId" params={{ movieId: String(movie.id) }}>
-            <Card className="group relative overflow-hidden bg-card border-border transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-xl hover:shadow-primary/20">
+            <Card className="group relative overflow-hidden bg-card border-border transition-all duration-200 cursor-pointer hover:scale-105 hover:shadow-md hover:shadow-primary/10">
                 {action && (
-                    <div className="absolute top-2 right-2 z-10">
-                        {action}
-                    </div>
+                    <div className="absolute top-2 right-2 z-10">{action}</div>
                 )}
 
                 {movie.poster_path ? (
@@ -43,9 +41,10 @@ export function MovieCard({ movie, action }: MovieCardProps) {
                         {movie.title}
                     </h3>
                     <div className="flex items-center justify-between">
-                        <p className="text-yellow-500 text-sm font-medium">
-                            ⭐ {movie.vote_average.toFixed(1)}
-                        </p>
+                        <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
+                            <Star className="size-3.5 fill-yellow-500 text-yellow-500" />
+                            {movie.vote_average.toFixed(1)}
+                        </div>
                         <p className="text-muted-foreground text-xs">{year}</p>
                     </div>
                 </CardContent>

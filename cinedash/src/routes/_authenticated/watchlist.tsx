@@ -16,8 +16,8 @@ export function WatchlistPage() {
                     Minha Lista
                 </h2>
                 <p className="text-muted-foreground">
-                    {movies.length}{' '}
-                    {movies.length === 1 ? 'filme' : 'filmes'} salvos
+                    {movies.length} {movies.length === 1 ? 'filme' : 'filmes'}{' '}
+                    salvos
                 </p>
             </div>
 
@@ -30,7 +30,7 @@ export function WatchlistPage() {
                     <p className="text-muted-foreground mb-6">
                         Adicione filmes à sua lista para assistir depois
                     </p>
-                    <Link to="/dashboard" className="cursor-pointer">
+                    <Link to="/dashboard" search={{ page: 1 }} className="cursor-pointer">
                         <Button>Descobrir Filmes</Button>
                     </Link>
                 </div>

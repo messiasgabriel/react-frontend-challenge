@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { genresQueryOptions } from '@/entities/movie';
 import { useFiltersStore } from '../model/filters-store';
 import { RatingFilter } from './rating-filter';
 import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
 import {
     Select,
     SelectContent,
@@ -22,6 +24,31 @@ export function MovieFilters() {
         setYear,
         clearFilters,
     } = useFiltersStore();
+
+    const [yearInput, setYearInput] = useState(year?.toString() ?? '');
+    const [yearError, setYearError] = useState('');
+    const currentYear = new Date().getFullYear();
+    const MIN_YEAR = 1874;
+
+    function handleYearChange(value: string) {
+        const digits = value.replace(/\D/g, '').slice(0, 4);
+        setYearInput(digits);
+        setYearError('');
+        if (digits === '') {
+            setYear(null);
+        } else if (digits.length === 4) {
+            const num = Number(digits);
+            if (num < MIN_YEAR) {
+                setYearError(`Registros a partir de ${MIN_YEAR}`);
+                setYear(null);
+            } else if (num > currentYear) {
+                setYearError(`Ano não pode ser maior que ${currentYear}`);
+                setYear(null);
+            } else {
+                setYear(num);
+            }
+        }
+    }
 
     const { data: genresData } = useQuery(genresQueryOptions());
 
@@ -61,27 +88,18 @@ export function MovieFilters() {
                 {/* Year Filter */}
                 <div className="flex-1 space-y-2">
                     <Label className="text-sm font-medium">Ano</Label>
-                    <Select
-                        value={year?.toString() || 'all'}
-                        onValueChange={(value) =>
-                            setYear(value === 'all' ? null : Number(value))
-                        }
-                    >
-                        <SelectTrigger className="cursor-pointer">
-                            <SelectValue placeholder="Todos os anos" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Todos os anos</SelectItem>
-                            {Array.from(
-                                { length: 10 },
-                                (_, i) => new Date().getFullYear() - i,
-                            ).map((y) => (
-                                <SelectItem key={y} value={y.toString()}>
-                                    {y}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <Input
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="Ex: 2023"
+                        value={yearInput}
+                        onChange={(e) => handleYearChange(e.target.value)}
+                        maxLength={4}
+                        className="w-fit"
+                    />
+                    {yearError && (
+                        <p className="text-xs text-destructive">{yearError}</p>
+                    )}
                 </div>
 
                 {/* Rating Filter */}

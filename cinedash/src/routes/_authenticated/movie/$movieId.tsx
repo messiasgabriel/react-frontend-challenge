@@ -1,9 +1,11 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/shared/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import {
     movieDetailQueryOptions,
+    movieCreditsQueryOptions,
+    movieVideosQueryOptions,
     MovieDetailView,
     MovieCast,
     MovieTrailer,
@@ -16,7 +18,7 @@ export const Route = createFileRoute('/_authenticated/movie/$movieId')({
 
 export function MovieDetailPage() {
     const { movieId } = Route.useParams();
-    const navigate = useNavigate();
+    const router = useRouter();
     const id = Number(movieId);
 
     const {
@@ -26,20 +28,21 @@ export function MovieDetailPage() {
         refetch,
     } = useQuery(movieDetailQueryOptions(id));
 
+    useQuery(movieCreditsQueryOptions(id));
+    useQuery(movieVideosQueryOptions(id));
+
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="space-y-10">
-                <div className="flex justify-end md:justify-start">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate({ to: '/dashboard' })}
-                        className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
-                    >
-                        <ArrowLeft className="size-4" />
-                        Voltar
-                    </Button>
-                </div>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => router.history.back()}
+                    className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                    <ArrowLeft className="size-4" />
+                    Voltar
+                </Button>
 
                 {isLoading && (
                     <div className="space-y-6 animate-pulse">

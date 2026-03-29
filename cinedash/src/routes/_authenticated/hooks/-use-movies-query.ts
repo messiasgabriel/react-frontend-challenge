@@ -6,6 +6,7 @@ import {
     trendingQueryOptions,
     searchQueryOptions,
     discoverQueryOptions,
+    genresQueryOptions,
 } from '@/entities/movie';
 import type { DiscoverParams } from '@/entities/movie';
 
@@ -46,11 +47,14 @@ export function useMoviesQuery(page: number) {
           ? discoverResult
           : trendingResult;
 
+    const { data: genresData } = useQuery(genresQueryOptions());
+    const genreName = genreId
+        ? (genresData?.genres.find((g) => g.id === genreId)?.name ?? 'Filmes Filtrados')
+        : 'Todos os Gêneros';
+
     const title = isSearching
         ? `Resultados para "${debouncedQuery}"`
-        : hasFilters
-          ? 'Filmes Filtrados'
-          : 'Em Alta';
+        : genreName;
 
     return {
         movies: activeResult.data?.results ?? [],

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { Clapperboard } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 
@@ -11,7 +12,9 @@ export function NotFoundPage() {
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
             <Card className="max-w-md w-full text-center">
                 <CardContent className="pt-12 pb-8 space-y-6">
-                    <div className="text-8xl">🎬</div>
+                    <div className="flex justify-center text-muted-foreground">
+                        <Clapperboard className="size-20 opacity-40" />
+                    </div>
 
                     <div className="space-y-2">
                         <h1 className="text-6xl font-bold text-foreground">
@@ -28,7 +31,7 @@ export function NotFoundPage() {
                     </p>
 
                     <div className="flex gap-3 justify-center pt-4">
-                        <Link to="/dashboard" className="cursor-pointer">
+                        <Link to="/dashboard" search={{ page: 1 }} className="cursor-pointer">
                             <Button>Ir para Dashboard</Button>
                         </Link>
                         <Link to="/" className="cursor-pointer">
