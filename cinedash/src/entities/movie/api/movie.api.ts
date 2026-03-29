@@ -12,8 +12,8 @@ export function fetchPopularMovies(page = 1) {
     return tmdbFetch<MovieListResponse>('/movie/popular', { page });
 }
 
-export function fetchTrendingMovies() {
-    return tmdbFetch<MovieListResponse>('/trending/movie/week');
+export function fetchTrendingMovies(page = 1) {
+    return tmdbFetch<MovieListResponse>('/trending/movie/week', { page });
 }
 
 export function searchMovies(query: string, page = 1) {

@@ -37,7 +37,7 @@ export function popularQueryOptions(page: number) {
 export function trendingQueryOptions(page: number) {
     return queryOptions({
         queryKey: movieKeys.trending(page),
-        queryFn: () => fetchTrendingMovies(),
+        queryFn: () => fetchTrendingMovies(page),
         staleTime: 5 * 60 * 1000,
         placeholderData: keepPreviousData,
     });

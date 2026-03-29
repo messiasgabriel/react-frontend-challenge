@@ -7,6 +7,7 @@ import { SearchBar } from '@/features/movie-search';
 import { WatchlistToggle } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
 import { useMoviesQuery } from './hooks/-use-movies-query';
+import { Pagination } from '@/shared/ui/pagination';
 
 const searchSchema = z.object({
     page: z.number().int().positive().optional().default(1),
@@ -60,45 +61,6 @@ function MoviesGrid({
     );
 }
 
-function MoviesPagination({
-    page,
-    totalPages,
-    onPrev,
-    onNext,
-}: {
-    page: number;
-    totalPages: number;
-    onPrev: () => void;
-    onNext: () => void;
-}) {
-    const capped = Math.min(totalPages, 500);
-    return (
-        <div className="flex items-center justify-center gap-3 pt-4">
-            <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={onPrev}
-                className="cursor-pointer"
-            >
-                ← Anterior
-            </Button>
-            <span className="text-sm tabular-nums text-muted-foreground">
-                {page} / {capped}
-            </span>
-            <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= capped}
-                onClick={onNext}
-                className="cursor-pointer"
-            >
-                Próxima →
-            </Button>
-        </div>
-    );
-}
-
 export function DashboardPage() {
     const { page } = Route.useSearch();
     const navigate = useNavigate({ from: Route.fullPath });
@@ -146,11 +108,10 @@ export function DashboardPage() {
             {!isError && <MoviesGrid movies={movies} isLoading={isLoading} />}
 
             {!isLoading && !isError && movies.length > 0 && (
-                <MoviesPagination
-                    page={page}
+                <Pagination
+                    currentPage={page}
                     totalPages={totalPages}
-                    onPrev={() => setPage(page - 1)}
-                    onNext={() => setPage(page + 1)}
+                    onPageChange={setPage}
                 />
             )}
         </main>
