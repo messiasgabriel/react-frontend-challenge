@@ -7,6 +7,7 @@ type ImageSize =
     | 'w342'
     | 'w500'
     | 'w780'
+    | 'w1280'
     | 'original';
 
 export function getImageUrl(

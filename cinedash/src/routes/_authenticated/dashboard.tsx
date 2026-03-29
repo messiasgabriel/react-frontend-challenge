@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
-import { MovieCard, MovieCardSkeleton } from '@/entities/movie';
+import { MovieCard, MovieCardSkeleton, MovieHero } from '@/entities/movie';
 import type { Movie } from '@/entities/movie';
 import { MovieFilters } from '@/features/movie-filters';
 import { SearchBar } from '@/features/movie-search';
@@ -73,6 +73,7 @@ export function DashboardPage() {
         refetch,
         title,
         isSearching,
+        hasFilters,
     } = useMoviesQuery(page);
 
     function setPage(newPage: number) {
@@ -82,6 +83,10 @@ export function DashboardPage() {
 
     return (
         <main className="container mx-auto px-4 py-8 space-y-8 flex-1">
+            {!isSearching && !hasFilters && page === 1 && (
+                <MovieHero movies={movies} />
+            )}
+
             <h2 className="text-3xl font-bold text-foreground">{title}</h2>
 
             <div className="flex justify-center">

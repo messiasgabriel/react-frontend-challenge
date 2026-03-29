@@ -42,6 +42,7 @@ export {
 export { getImageUrl } from './lib/get-image-url';
 
 export { MovieCard } from './ui/movie-card';
+export { MovieHero } from './ui/movie-hero';
 export { MovieCardSkeleton } from './ui/movie-card-skeleton';
 export { MovieDetailView } from './ui/movie-detail';
 export { MovieCast } from './ui/movie-cast';

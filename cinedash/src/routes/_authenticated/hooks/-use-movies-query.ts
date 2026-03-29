@@ -60,5 +60,6 @@ export function useMoviesQuery(page: number) {
         refetch: activeResult.refetch,
         title,
         isSearching,
+        hasFilters,
     };
 }

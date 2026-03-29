@@ -20,13 +20,13 @@ export function WatchlistToggle({ movie, showLabel }: WatchlistToggleProps) {
         if (inWatchlist) {
             removeMovie(movie.id);
             toast('Removido da lista', {
-                description: `${movie.title} foi removido da sua watchlist`,
+                description: `${movie.title} foi removido da sua lista`,
                 icon: <XCircle className="size-4 text-destructive" />,
             });
         } else {
             addMovie(movie);
             toast.success('Adicionado à lista', {
-                description: `${movie.title} foi adicionado à sua watchlist`,
+                description: `${movie.title} foi adicionado à sua lista`,
             });
         }
     };
