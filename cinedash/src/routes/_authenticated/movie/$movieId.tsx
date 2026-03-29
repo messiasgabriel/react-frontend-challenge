@@ -1,15 +1,14 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import {
-    fetchMovieDetails,
-    fetchMovieCredits,
-    fetchMovieVideos,
-    getImageUrl,
-} from '@/entities/movie';
-import { useWatchlistStore } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
+import {
+    movieDetailQueryOptions,
+    MovieDetailView,
+    MovieCast,
+    MovieTrailer,
+} from '@/entities/movie';
+import { WatchlistToggle } from '@/features/watchlist';
 
 export const Route = createFileRoute('/_authenticated/movie/$movieId')({
     component: MovieDetailPage,
@@ -18,216 +17,67 @@ export const Route = createFileRoute('/_authenticated/movie/$movieId')({
 export function MovieDetailPage() {
     const { movieId } = Route.useParams();
     const navigate = useNavigate();
-    const { addMovie, removeMovie, isInWatchlist } = useWatchlistStore();
+    const id = Number(movieId);
 
-    const { data: movie, isLoading: isLoadingMovie } = useQuery({
-        queryKey: ['movie', 'details', movieId],
-        queryFn: () => fetchMovieDetails(Number(movieId)),
-    });
-
-    const { data: credits } = useQuery({
-        queryKey: ['movie', 'credits', movieId],
-        queryFn: () => fetchMovieCredits(Number(movieId)),
-        enabled: !!movie,
-    });
-
-    const { data: videos } = useQuery({
-        queryKey: ['movie', 'videos', movieId],
-        queryFn: () => fetchMovieVideos(Number(movieId)),
-        enabled: !!movie,
-    });
-
-    if (isLoadingMovie) {
-        return (
-            <div className="flex items-center justify-center py-24">
-                <p className="text-foreground text-xl">Carregando...</p>
-            </div>
-        );
-    }
-
-    if (!movie) {
-        return (
-            <div className="flex items-center justify-center py-24">
-                <p className="text-foreground text-xl">Filme não encontrado</p>
-            </div>
-        );
-    }
-
-    const inWatchlist = isInWatchlist(movie.id);
-    const trailer = videos?.results.find(
-        (v) => v.type === 'Trailer' && v.site === 'YouTube',
-    );
-    const cast = credits?.cast.slice(0, 10) || [];
-
-    const handleToggleWatchlist = () => {
-        if (inWatchlist) {
-            removeMovie(movie.id);
-            toast.success('Removido da lista', {
-                description: `${movie.title} foi removido da sssua watchlist`,
-            });
-        } else {
-            addMovie(movie);
-            toast.success('Adicionado à lista', {
-                description: `${movie.title} foi adicionado à sua watchlist`,
-            });
-        }
-    };
+    const {
+        data: movie,
+        isLoading,
+        isError,
+        refetch,
+    } = useQuery(movieDetailQueryOptions(id));
 
     return (
-        <div>
-            {/* Sub-header */}
-            <header className="bg-card border-b border-border">
-                <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate({ to: '/dashboard' })}
-                    >
-                        ← Voltar
-                    </Button>
-                    <h1 className="text-xl font-bold text-foreground">
-                        Detalhes do Filme
-                    </h1>
-                </div>
-            </header>
+        <div className="container mx-auto px-4 py-8">
+            <div className="space-y-10">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate({ to: '/dashboard' })}
+                    className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                    <ArrowLeft className="size-4" />
+                    Voltar
+                </Button>
 
-            {/* Content */}
-            <main className="container mx-auto px-4 py-8">
-                {/* Hero Section */}
-                <div className="grid md:grid-cols-[300px_1fr] gap-8 mb-8">
-                    {/* Poster */}
-                    <div>
-                        <img
-                            src={getImageUrl(movie.poster_path, 'w500')}
-                            alt={movie.title}
-                            className="w-full rounded-lg shadow-2xl"
-                        />
-                    </div>
-
-                    {/* Info */}
-                    <div className="space-y-6">
-                        <div>
-                            <h1 className="text-4xl font-bold text-foreground mb-2">
-                                {movie.title}
-                            </h1>
-                            {movie.tagline && (
-                                <p className="text-muted-foreground italic">
-                                    {movie.tagline}
-                                </p>
-                            )}
-                        </div>
-
-                        <div className="flex items-center gap-4 flex-wrap">
-                            <div className="flex items-center gap-2">
-                                <span className="text-yellow-500 text-2xl">
-                                    ⭐
-                                </span>
-                                <span className="text-foreground text-xl font-semibold">
-                                    {movie.vote_average.toFixed(1)}
-                                </span>
+                {isLoading && (
+                    <div className="space-y-6 animate-pulse">
+                        <div className="grid gap-8 md:grid-cols-[auto_1fr]">
+                            <div className="w-full md:w-80 aspect-2/3 bg-muted rounded-xl" />
+                            <div className="space-y-4">
+                                <div className="h-12 bg-muted rounded w-2/3" />
+                                <div className="h-6 bg-muted rounded w-1/3" />
+                                <div className="h-24 bg-muted rounded" />
                             </div>
-                            <span className="text-muted-foreground">
-                                {new Date(movie.release_date).getFullYear()}
-                            </span>
-                            <span className="text-muted-foreground">
-                                {movie.runtime} min
-                            </span>
-                        </div>
-
-                        <div className="flex gap-2 flex-wrap">
-                            {movie.genres.map((genre) => (
-                                <span
-                                    key={genre.id}
-                                    className="px-3 py-1 bg-muted text-muted-foreground rounded-full text-sm"
-                                >
-                                    {genre.name}
-                                </span>
-                            ))}
-                        </div>
-
-                        <div className="flex gap-3">
-                            <Button
-                                onClick={handleToggleWatchlist}
-                                className="gap-2"
-                            >
-                                {inWatchlist
-                                    ? '❤️ Na Lista'
-                                    : '🤍 Adicionar à Lista'}
-                            </Button>
-                        </div>
-
-                        <div>
-                            <h2 className="text-xl font-semibold text-foreground mb-2">
-                                Sinopse
-                            </h2>
-                            <p className="text-muted-foreground leading-relaxed">
-                                {movie.overview}
-                            </p>
                         </div>
                     </div>
-                </div>
-                {/* Trailer */}
-                {trailer && (
-                    <div>
-                        <h2 className="text-xl font-semibold text-foreground mb-3">
-                            Trailer
-                        </h2>
-                        <div
-                            className="relative w-full rounded-lg overflow-hidden"
-                            style={{ paddingBottom: '56.25%' }}
+                )}
+
+                {isError && (
+                    <div className="flex flex-col items-center gap-4 py-16">
+                        <p className="text-xl text-muted-foreground">
+                            Erro ao carregar detalhes
+                        </p>
+                        <Button
+                            variant="outline"
+                            onClick={() => refetch()}
+                            className="cursor-pointer"
                         >
-                            <iframe
-                                className="absolute inset-0 w-full h-full"
-                                src={`https://www.youtube.com/embed/${trailer.key}`}
-                                title={`${movie.title} - Trailer`}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            />
-                        </div>
+                            Tentar novamente
+                        </Button>
                     </div>
                 )}
-                {/* Cast */}
-                {cast.length > 0 && (
-                    <div>
-                        <h2 className="text-2xl font-bold text-foreground mb-4">
-                            Elenco Principal
-                        </h2>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                            {cast.map((actor) => (
-                                <Card
-                                    key={actor.id}
-                                    className="bg-card border-border"
-                                >
-                                    <CardContent className="p-4 text-center">
-                                        {actor.profile_path ? (
-                                            <img
-                                                src={getImageUrl(
-                                                    actor.profile_path,
-                                                    'w185',
-                                                )}
-                                                alt={actor.name}
-                                                className="w-full aspect-2/3 object-cover rounded-lg mb-2"
-                                            />
-                                        ) : (
-                                            <div className="w-full aspect-2/3 bg-muted rounded-lg mb-2 flex items-center justify-center">
-                                                <span className="text-4xl">
-                                                    👤
-                                                </span>
-                                            </div>
-                                        )}
-                                        <p className="text-foreground font-medium text-sm">
-                                            {actor.name}
-                                        </p>
-                                        <p className="text-muted-foreground text-xs">
-                                            {actor.character}
-                                        </p>
-                                    </CardContent>
-                                </Card>
-                            ))}
-                        </div>
-                    </div>
+
+                {movie && (
+                    <>
+                        <MovieDetailView
+                            movie={movie}
+                            action={<WatchlistToggle movie={movie} showLabel />}
+                        />
+                        <MovieCast movieId={id} />
+                        <MovieTrailer movieId={id} />
+                    </>
                 )}
-            </main>
+            </div>
         </div>
     );
 }

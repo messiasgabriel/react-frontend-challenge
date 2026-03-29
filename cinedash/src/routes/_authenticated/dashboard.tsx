@@ -1,155 +1,157 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
-import { useState, useCallback } from 'react';
-import {
-    fetchPopularMovies,
-    searchMovies,
-    discoverMovies,
-    MovieCard,
-    MovieCardSkeleton,
-} from '@/entities/movie';
-import { useFiltersStore, MovieFilters } from '@/features/movie-filters';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { z } from 'zod';
+import { MovieCard, MovieCardSkeleton } from '@/entities/movie';
+import type { Movie } from '@/entities/movie';
+import { MovieFilters } from '@/features/movie-filters';
 import { SearchBar } from '@/features/movie-search';
-import { WatchlistToggleButton } from '@/features/watchlist';
+import { WatchlistToggle } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
+import { useMoviesQuery } from './hooks/-use-movies-query';
+
+const searchSchema = z.object({
+    page: z.number().int().positive().optional().default(1),
+});
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
+    validateSearch: searchSchema,
     component: DashboardPage,
 });
 
-export function DashboardPage() {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [page, setPage] = useState(1);
+function MoviesGrid({
+    movies,
+    isLoading,
+}: {
+    movies: Movie[];
+    isLoading: boolean;
+}) {
+    if (isLoading) {
+        return (
+            <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                {Array.from({ length: 10 }).map((_, i) => (
+                    <MovieCardSkeleton key={i} />
+                ))}
+            </div>
+        );
+    }
 
-    const { genreId, year, minRating } = useFiltersStore();
-    const hasFilters = genreId || year || minRating;
-
-    const { data, isLoading } = useQuery({
-        queryKey: ['movies', searchQuery, genreId, year, minRating, page],
-        queryFn: () => {
-            if (searchQuery) {
-                return searchMovies(searchQuery, page);
-            }
-
-            if (hasFilters) {
-                return discoverMovies({ genreId, year, minRating, page });
-            }
-
-            return fetchPopularMovies(page);
-        },
-    });
-
-    const handleSearch = useCallback((query: string) => {
-        if (query.trim().length >= 3 || query === '') {
-            setSearchQuery(query);
-            setPage(1);
-        }
-    }, []);
-
-    const handleNextPage = () => {
-        if (data && page < data.total_pages) {
-            setPage((prev) => prev + 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
-    const handlePrevPage = () => {
-        if (page > 1) {
-            setPage((prev) => prev - 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
-    const canGoNext = data && page < data.total_pages;
-    const canGoPrev = page > 1;
+    if (movies.length === 0) {
+        return (
+            <div className="py-16 text-center">
+                <p className="text-xl text-muted-foreground">
+                    Nenhum filme encontrado
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground/60">
+                    Tente ajustar sua busca ou filtros.
+                </p>
+            </div>
+        );
+    }
 
     return (
-        <main className="container mx-auto px-4 py-8 space-y-8">
-            {/* Search */}
+        <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {movies.map((movie) => (
+                <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    action={<WatchlistToggle movie={movie} />}
+                />
+            ))}
+        </div>
+    );
+}
+
+function MoviesPagination({
+    page,
+    totalPages,
+    onPrev,
+    onNext,
+}: {
+    page: number;
+    totalPages: number;
+    onPrev: () => void;
+    onNext: () => void;
+}) {
+    const capped = Math.min(totalPages, 500);
+    return (
+        <div className="flex items-center justify-center gap-3 pt-4">
+            <Button
+                variant="outline"
+                size="sm"
+                disabled={page <= 1}
+                onClick={onPrev}
+                className="cursor-pointer"
+            >
+                ← Anterior
+            </Button>
+            <span className="text-sm tabular-nums text-muted-foreground">
+                {page} / {capped}
+            </span>
+            <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= capped}
+                onClick={onNext}
+                className="cursor-pointer"
+            >
+                Próxima →
+            </Button>
+        </div>
+    );
+}
+
+export function DashboardPage() {
+    const { page } = Route.useSearch();
+    const navigate = useNavigate({ from: Route.fullPath });
+
+    const {
+        movies,
+        totalPages,
+        isLoading,
+        isError,
+        refetch,
+        title,
+        isSearching,
+    } = useMoviesQuery(page);
+
+    function setPage(newPage: number) {
+        navigate({ search: { page: newPage } });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    return (
+        <main className="container mx-auto px-4 py-8 space-y-8 flex-1">
+            <h2 className="text-3xl font-bold text-foreground">{title}</h2>
+
             <div className="flex justify-center">
-                <SearchBar onSearch={handleSearch} />
+                <SearchBar />
             </div>
 
-            {/* Filters */}
-            {!searchQuery && <MovieFilters />}
+            {!isSearching && <MovieFilters />}
 
-            {/* Title */}
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold text-foreground">
-                    {searchQuery
-                        ? `Resultados para "${searchQuery}"`
-                        : hasFilters
-                          ? 'Filmes Filtrados'
-                          : 'Filmes Populares'}
-                </h2>
-                {data && !isLoading && (
-                    <p className="text-muted-foreground text-sm">
-                        Página {page} de {data.total_pages}
+            {isError && (
+                <div className="flex flex-col items-center gap-4 py-16 text-center">
+                    <p className="text-lg text-muted-foreground">
+                        Erro ao carregar filmes
                     </p>
-                )}
-            </div>
-
-            {/* Results count */}
-            {data && !isLoading && (
-                <p className="text-muted-foreground">
-                    {data.total_results}{' '}
-                    {data.total_results === 1 ? 'resultado' : 'resultados'}
-                </p>
+                    <Button
+                        variant="outline"
+                        onClick={() => refetch()}
+                        className="cursor-pointer"
+                    >
+                        Tentar novamente
+                    </Button>
+                </div>
             )}
 
-            {/* Loading State */}
-            {isLoading ? (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                        <MovieCardSkeleton key={i} />
-                    ))}
-                </div>
-            ) : (
-                <>
-                    {/* Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                        {data?.results.length === 0 ? (
-                            <div className="col-span-full text-center py-12">
-                                <p className="text-muted-foreground text-lg">
-                                    Nenhum filme encontrado
-                                </p>
-                            </div>
-                        ) : (
-                            data?.results.map((movie) => (
-                                <MovieCard
-                                    key={movie.id}
-                                    movie={movie}
-                                    action={<WatchlistToggleButton movie={movie} />}
-                                />
-                            ))
-                        )}
-                    </div>
+            {!isError && <MoviesGrid movies={movies} isLoading={isLoading} />}
 
-                    {/* Pagination */}
-                    {data && data.results.length > 0 && (
-                        <div className="flex items-center justify-center gap-4 pt-8">
-                            <Button
-                                variant="outline"
-                                onClick={handlePrevPage}
-                                disabled={!canGoPrev}
-                            >
-                                ← Anterior
-                            </Button>
-
-                            <span className="text-muted-foreground text-sm">
-                                Página {page} de {data.total_pages}
-                            </span>
-
-                            <Button
-                                variant="outline"
-                                onClick={handleNextPage}
-                                disabled={!canGoNext}
-                            >
-                                Próxima →
-                            </Button>
-                        </div>
-                    )}
-                </>
+            {!isLoading && !isError && movies.length > 0 && (
+                <MoviesPagination
+                    page={page}
+                    totalPages={totalPages}
+                    onPrev={() => setPage(page - 1)}
+                    onNext={() => setPage(page + 1)}
+                />
             )}
         </main>
     );

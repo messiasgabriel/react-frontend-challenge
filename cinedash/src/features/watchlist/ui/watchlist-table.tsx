@@ -3,8 +3,8 @@ import {
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
-    SortingState,
-    ColumnDef,
+    type SortingState,
+    type ColumnDef,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
@@ -12,20 +12,13 @@ import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
 import { getImageUrl } from '@/entities/movie';
-import { useWatchlistStore, WatchlistMovie } from '../model/watchlist-store';
+import type { WatchlistMovie } from '@/entities/movie';
+import { useWatchlistStore } from '../model/watchlist-store';
 
-export function WatchlistTable() {
-    const { movies, removeMovie } = useWatchlistStore();
-    const [sorting, setSorting] = useState<SortingState>([]);
-
-    const handleRemove = (movie: WatchlistMovie) => {
-        removeMovie(movie.id);
-        toast.success('Removido da lista', {
-            description: `${movie.title} foi removido da sua watchlist`,
-        });
-    };
-
-    const columns: ColumnDef<WatchlistMovie>[] = [
+function createWatchlistColumns(
+    onRemove: (movie: WatchlistMovie) => void,
+): ColumnDef<WatchlistMovie>[] {
+    return [
         {
             accessorKey: 'poster_path',
             header: 'Poster',
@@ -62,7 +55,7 @@ export function WatchlistTable() {
                 <Link
                     to="/movie/$movieId"
                     params={{ movieId: row.original.id.toString() }}
-                    className="text-foreground hover:text-primary font-medium transition-colors"
+                    className="cursor-pointer text-foreground hover:text-primary font-medium transition-colors"
                 >
                     {row.original.title}
                 </Link>
@@ -122,20 +115,33 @@ export function WatchlistTable() {
                 <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleRemove(row.original)}
+                    onClick={() => onRemove(row.original)}
                 >
                     Remover
                 </Button>
             ),
         },
     ];
+}
+
+export function WatchlistTable() {
+    'use no memo';
+    const { movies, removeMovie } = useWatchlistStore();
+    const [sorting, setSorting] = useState<SortingState>([]);
+
+    const handleRemove = (movie: WatchlistMovie) => {
+        removeMovie(movie.id);
+        toast.success('Removido da lista', {
+            description: `${movie.title} foi removido da sua watchlist`,
+        });
+    };
+
+    const columns = createWatchlistColumns(handleRemove);
 
     const table = useReactTable({
         data: movies,
         columns,
-        state: {
-            sorting,
-        },
+        state: { sorting },
         onSortingChange: setSorting,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -156,8 +162,7 @@ export function WatchlistTable() {
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
+                                                  header.column.columnDef.header,
                                                   header.getContext(),
                                               )}
                                     </th>

@@ -16,6 +16,7 @@ interface AuthStore {
     login: (data: LoginFormData) => Promise<void>;
     logout: () => void;
     restoreSession: () => Promise<void>;
+    checkSession: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>()((set) => ({
@@ -62,5 +63,22 @@ export const useAuthStore = create<AuthStore>()((set) => ({
             isAuthenticated: true,
             isLoading: false,
         });
+    },
+
+    checkSession: async () => {
+        const token = getCookie();
+
+        if (!token) {
+            deleteCookie();
+            set({ user: null, isAuthenticated: false });
+            return;
+        }
+
+        const payload = await verifyToken(token);
+
+        if (!payload) {
+            deleteCookie();
+            set({ user: null, isAuthenticated: false });
+        }
     },
 }));

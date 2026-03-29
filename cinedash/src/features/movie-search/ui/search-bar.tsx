@@ -1,35 +1,19 @@
-import { useEffect, useState } from 'react';
 import { Input } from '@/shared/ui/input';
-import { useDebounce } from '@/shared/hooks/use-debounce';
+import { useSearchStore } from '../model/search-store';
 
-type SearchBarProps = {
-    onSearch: (query: string) => void;
-};
-
-export function SearchBar({ onSearch }: SearchBarProps) {
-    const [searchTerm, setSearchTerm] = useState('');
-    const debouncedSearch = useDebounce(searchTerm, 500);
-
-    useEffect(() => {
-        if (debouncedSearch.length >= 3 || debouncedSearch === '') {
-            onSearch(debouncedSearch);
-        }
-    }, [debouncedSearch, onSearch]);
+export function SearchBar() {
+    const query = useSearchStore((s) => s.query);
+    const setQuery = useSearchStore((s) => s.setQuery);
 
     return (
         <div className="w-full max-w-2xl">
             <Input
                 type="search"
                 placeholder="Buscar filmes... (ex: Inception, Matrix)"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 className="w-full"
             />
-            {debouncedSearch && (
-                <p className="text-sm text-muted-foreground mt-2">
-                    Buscando por: "{debouncedSearch}"
-                </p>
-            )}
         </div>
     );
 }

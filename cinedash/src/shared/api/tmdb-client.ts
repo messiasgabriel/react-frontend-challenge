@@ -1,4 +1,4 @@
-const { TMDB_API_KEY, TMDB_BASE_URL } = env;
+const { TMDB_ACCESS_TOKEN, TMDB_BASE_URL } = env;
 import { env } from '@/shared/config/env';
 import { ApiError } from './api-error';
 
@@ -19,7 +19,7 @@ export async function tmdbFetch<T>(
 
     const response = await fetch(url.toString(), {
         headers: {
-            Authorization: `Bearer ${TMDB_API_KEY}`,
+            Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
             'Content-Type': 'application/json',
         },
     });

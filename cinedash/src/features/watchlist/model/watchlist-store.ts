@@ -1,11 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Movie } from '@/entities/movie';
-
-export type WatchlistMovie = Pick<
-    Movie,
-    'id' | 'title' | 'poster_path' | 'backdrop_path' | 'vote_average' | 'release_date' | 'overview'
->;
+import type { WatchlistMovie } from '@/entities/movie';
 
 type WatchlistState = {
     movies: WatchlistMovie[];

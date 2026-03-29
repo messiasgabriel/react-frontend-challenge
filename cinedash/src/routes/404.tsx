@@ -28,10 +28,10 @@ export function NotFoundPage() {
                     </p>
 
                     <div className="flex gap-3 justify-center pt-4">
-                        <Link to="/dashboard">
+                        <Link to="/dashboard" className="cursor-pointer">
                             <Button>Ir para Dashboard</Button>
                         </Link>
-                        <Link to="/">
+                        <Link to="/" className="cursor-pointer">
                             <Button variant="outline">Voltar ao Início</Button>
                         </Link>
                     </div>

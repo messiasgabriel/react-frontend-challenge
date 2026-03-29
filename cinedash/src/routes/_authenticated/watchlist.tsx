@@ -30,7 +30,7 @@ export function WatchlistPage() {
                     <p className="text-muted-foreground mb-6">
                         Adicione filmes à sua lista para assistir depois
                     </p>
-                    <Link to="/dashboard">
+                    <Link to="/dashboard" className="cursor-pointer">
                         <Button>Descobrir Filmes</Button>
                     </Link>
                 </div>
