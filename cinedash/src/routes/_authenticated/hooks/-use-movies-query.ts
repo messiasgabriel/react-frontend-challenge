@@ -55,7 +55,7 @@ export function useMoviesQuery(page: number) {
     return {
         movies: activeResult.data?.results ?? [],
         totalPages: activeResult.data?.total_pages ?? 1,
-        isLoading: activeResult.isLoading,
+        isLoading: activeResult.isLoading || activeResult.isFetching,
         isError: activeResult.isError,
         refetch: activeResult.refetch,
         title,

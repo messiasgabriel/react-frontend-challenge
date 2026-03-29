@@ -39,6 +39,12 @@ export interface ProductionCompany {
     origin_country: string;
 }
 
+export interface SpokenLanguage {
+    iso_639_1: string;
+    name: string;
+    english_name: string;
+}
+
 export interface MovieDetails extends Movie {
     budget: number;
     revenue: number;
@@ -49,6 +55,8 @@ export interface MovieDetails extends Movie {
     imdb_id: string | null;
     genres: Genre[];
     production_companies: ProductionCompany[];
+    spoken_languages: SpokenLanguage[];
+    origin_country: string[];
 }
 
 export interface CastMember {

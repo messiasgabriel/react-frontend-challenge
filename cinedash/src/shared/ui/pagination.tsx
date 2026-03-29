@@ -1,6 +1,6 @@
 import { Button } from './button';
 
-type AdvancedPaginationProps = {
+type PaginationProps = {
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
@@ -10,33 +10,15 @@ export function Pagination({
     currentPage,
     totalPages,
     onPageChange,
-}: AdvancedPaginationProps) {
+}: PaginationProps) {
     const maxPages = Math.min(totalPages, 500); // TMDB limit
 
     const getPageNumbers = () => {
-        const delta = 2;
-        const pages: (number | string)[] = [];
+        const pages: number[] = [];
 
-        pages.push(1);
-
-        const rangeStart = Math.max(2, currentPage - delta);
-        const rangeEnd = Math.min(maxPages - 1, currentPage + delta);
-
-        if (rangeStart > 2) {
-            pages.push('...');
-        }
-
-        for (let i = rangeStart; i <= rangeEnd; i++) {
-            pages.push(i);
-        }
-
-        if (rangeEnd < maxPages - 1) {
-            pages.push('...');
-        }
-
-        if (maxPages > 1) {
-            pages.push(maxPages);
-        }
+        if (currentPage > 1) pages.push(currentPage - 1);
+        pages.push(currentPage);
+        if (currentPage < maxPages) pages.push(currentPage + 1);
 
         return pages;
     };
@@ -53,25 +35,16 @@ export function Pagination({
                 disabled={currentPage === 1}
                 className="cursor-pointer"
             >
-                ← Primeira
+                Primeira
             </Button>
 
+            {currentPage > 2 && (
+                <span className="px-1 text-muted-foreground">...</span>
+            )}
+
             {/* Números de página */}
-            {pages.map((page, index) => {
-                if (page === '...') {
-                    return (
-                        <span
-                            key={`ellipsis-${index}`}
-                            className="px-2 text-muted-foreground"
-                        >
-                            ...
-                        </span>
-                    );
-                }
-
-                const pageNum = page as number;
+            {pages.map((pageNum) => {
                 const isActive = pageNum === currentPage;
-
                 return (
                     <Button
                         key={pageNum}
@@ -79,12 +52,16 @@ export function Pagination({
                         size="sm"
                         onClick={() => onPageChange(pageNum)}
                         disabled={isActive}
-                        className="cursor-pointer min-w-2.5rem"
+                        className="cursor-pointer min-w-9"
                     >
                         {pageNum}
                     </Button>
                 );
             })}
+
+            {currentPage < maxPages - 1 && (
+                <span className="px-1 text-muted-foreground">...</span>
+            )}
 
             {/* Última */}
             <Button
@@ -94,7 +71,7 @@ export function Pagination({
                 disabled={currentPage === maxPages}
                 className="cursor-pointer"
             >
-                Última →
+                Última
             </Button>
         </div>
     );

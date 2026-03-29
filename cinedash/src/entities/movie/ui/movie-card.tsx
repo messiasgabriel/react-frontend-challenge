@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
+import { Film } from 'lucide-react';
 import { Card, CardContent } from '@/shared/ui/card';
 import { getImageUrl } from '../lib/get-image-url';
 import type { Movie } from '../model/types';
@@ -23,13 +24,22 @@ export function MovieCard({ movie, action }: MovieCardProps) {
                     </div>
                 )}
 
-                <img
-                    src={getImageUrl(movie.poster_path)}
-                    alt={movie.title}
-                    className="w-full aspect-2/3 object-cover"
-                />
+                {movie.poster_path ? (
+                    <img
+                        src={getImageUrl(movie.poster_path, 'w342')}
+                        alt={movie.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full aspect-2/3 object-cover"
+                    />
+                ) : (
+                    <div className="w-full aspect-2/3 bg-muted flex flex-col items-center justify-center gap-2 text-muted-foreground">
+                        <Film className="size-10 opacity-40" />
+                        <span className="text-xs opacity-40">Sem poster</span>
+                    </div>
+                )}
                 <CardContent className="p-3 space-y-2">
-                    <h3 className="text-foreground text-sm font-medium line-clamp-2 group-hover:text-primary transition-colors">
+                    <h3 className="text-foreground text-sm font-medium line-clamp-2 h-10 group-hover:text-primary transition-colors">
                         {movie.title}
                     </h3>
                     <div className="flex items-center justify-between">

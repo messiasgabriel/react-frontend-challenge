@@ -6,8 +6,8 @@ import { MovieFilters } from '@/features/movie-filters';
 import { SearchBar } from '@/features/movie-search';
 import { WatchlistToggle } from '@/features/watchlist';
 import { Button } from '@/shared/ui/button';
-import { useMoviesQuery } from './hooks/-use-movies-query';
 import { Pagination } from '@/shared/ui/pagination';
+import { useMoviesQuery } from './hooks/-use-movies-query';
 
 const searchSchema = z.object({
     page: z.number().int().positive().optional().default(1),

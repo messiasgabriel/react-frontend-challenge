@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, CardContent } from '@/shared/ui/card';
+import { Users } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
 import { getImageUrl } from '../lib/get-image-url';
 import { movieCreditsQueryOptions } from '../api/movie.queries';
 import type { CastMember } from '../model/types';
@@ -16,26 +17,28 @@ function useMovieCast(movieId: number) {
 }
 
 function CastMemberCard({ actor }: { actor: CastMember }) {
+    const initials = actor.name
+        .split(' ')
+        .slice(0, 2)
+        .map((n) => n[0])
+        .join('');
+
     return (
-        <Card className="overflow-hidden">
-            <CardContent className="p-2 text-center">
-                {actor.profile_path ? (
-                    <img
+        <div className="flex flex-col items-center gap-2 text-center">
+            <Avatar className="size-16">
+                {actor.profile_path && (
+                    <AvatarImage
                         src={getImageUrl(actor.profile_path, 'w185')}
                         alt={actor.name}
-                        className="w-full aspect-2/3 object-cover rounded-lg mb-2"
                     />
-                ) : (
-                    <div className="w-full aspect-2/3 bg-muted rounded-lg mb-2 flex items-center justify-center">
-                        <span className="text-2xl">👤</span>
-                    </div>
                 )}
+                <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
+            <div>
                 <p className="font-medium text-xs line-clamp-1">{actor.name}</p>
-                <p className="text-muted-foreground text-xs line-clamp-1">
-                    {actor.character}
-                </p>
-            </CardContent>
-        </Card>
+                <p className="text-muted-foreground text-xs line-clamp-1">{actor.character}</p>
+            </div>
+        </div>
     );
 }
 
@@ -64,7 +67,18 @@ export function MovieCast({ movieId }: MovieCastProps) {
     const { cast, isLoading } = useMovieCast(movieId);
 
     if (isLoading) return <CastSkeleton />;
-    if (!cast.length) return null;
+
+    if (!cast.length) {
+        return (
+            <div>
+                <h2 className="text-2xl font-bold mb-4">Elenco Principal</h2>
+                <div className="flex flex-col items-center justify-center gap-3 py-10 text-muted-foreground">
+                    <Users className="size-10 opacity-40" />
+                    <p className="text-sm opacity-40">Elenco não disponível</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div>

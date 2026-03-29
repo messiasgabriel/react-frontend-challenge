@@ -29,15 +29,17 @@ export function MovieDetailPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="space-y-10">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => navigate({ to: '/dashboard' })}
-                    className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
-                >
-                    <ArrowLeft className="size-4" />
-                    Voltar
-                </Button>
+                <div className="flex justify-end md:justify-start">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigate({ to: '/dashboard' })}
+                        className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Voltar
+                    </Button>
+                </div>
 
                 {isLoading && (
                     <div className="space-y-6 animate-pulse">

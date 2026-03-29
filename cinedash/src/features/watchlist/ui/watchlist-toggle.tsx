@@ -1,4 +1,4 @@
-import { Bookmark, BookmarkCheck } from 'lucide-react';
+import { Bookmark, BookmarkCheck, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import type { WatchlistMovie } from '@/entities/movie';
 import { useWatchlistStore } from '../model/watchlist-store';
@@ -19,8 +19,9 @@ export function WatchlistToggle({ movie, showLabel }: WatchlistToggleProps) {
 
         if (inWatchlist) {
             removeMovie(movie.id);
-            toast.success('Removido da lista', {
+            toast('Removido da lista', {
                 description: `${movie.title} foi removido da sua watchlist`,
+                icon: <XCircle className="size-4 text-destructive" />,
             });
         } else {
             addMovie(movie);
@@ -34,7 +35,9 @@ export function WatchlistToggle({ movie, showLabel }: WatchlistToggleProps) {
         <Button
             variant={inWatchlist ? 'default' : 'secondary'}
             size={showLabel ? 'default' : 'icon'}
-            className={showLabel ? 'gap-2 cursor-pointer' : 'h-8 w-8 cursor-pointer'}
+            className={
+                showLabel ? 'gap-2 cursor-pointer' : 'h-8 w-8 cursor-pointer'
+            }
             onClick={handleToggle}
         >
             {inWatchlist ? (

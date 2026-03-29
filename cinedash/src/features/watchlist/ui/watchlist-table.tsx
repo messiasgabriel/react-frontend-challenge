@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { XCircle, Film } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
@@ -28,11 +29,17 @@ function createWatchlistColumns(
                     to="/movie/$movieId"
                     params={{ movieId: row.original.id.toString() }}
                 >
-                    <img
-                        src={getImageUrl(row.original.poster_path, 'w92')}
-                        alt={row.original.title}
-                        className="w-16 rounded shadow-md hover:scale-105 transition-transform cursor-pointer"
-                    />
+                    {row.original.poster_path ? (
+                        <img
+                            src={getImageUrl(row.original.poster_path, 'w92')}
+                            alt={row.original.title}
+                            className="w-16 rounded shadow-md hover:scale-105 transition-transform cursor-pointer"
+                        />
+                    ) : (
+                        <div className="w-16 aspect-2/3 rounded bg-muted flex items-center justify-center">
+                            <Film className="size-5 opacity-40 text-muted-foreground" />
+                        </div>
+                    )}
                 </Link>
             ),
         },
@@ -131,8 +138,9 @@ export function WatchlistTable() {
 
     const handleRemove = (movie: WatchlistMovie) => {
         removeMovie(movie.id);
-        toast.success('Removido da lista', {
+        toast('Removido da lista', {
             description: `${movie.title} foi removido da sua watchlist`,
+            icon: <XCircle className="size-4 text-destructive" />,
         });
     };
 

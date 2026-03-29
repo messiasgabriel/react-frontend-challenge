@@ -13,6 +13,7 @@ export type {
     VideosResponse,
     DiscoverParams,
     WatchlistMovie,
+    SpokenLanguage,
 } from './model/types';
 
 export {
