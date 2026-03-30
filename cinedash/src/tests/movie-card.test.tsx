@@ -23,7 +23,6 @@ const baseMovie: Movie = {
     adult: false,
     original_language: 'en',
     original_title: 'Inception',
-    video: false,
 };
 
 describe('MovieCard', () => {

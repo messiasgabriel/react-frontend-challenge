@@ -6,7 +6,7 @@ type ErrorFallbackProps = {
     resetError: () => void;
 };
 
-export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
+export function ErrorFallback({ error }: ErrorFallbackProps) {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-4">
             <Card className="max-w-md w-full">

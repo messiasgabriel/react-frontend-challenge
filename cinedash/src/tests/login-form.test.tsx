@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { LoginForm } from '@/features/auth/ui/login-form';
 import { useAuthStore } from '@/features/auth/model/auth-store';
 
@@ -19,7 +18,7 @@ vi.mock('@/features/auth/model/auth-store', () => ({
 const mockLogin = vi.fn();
 
 function setupAuthStore(overrides = {}) {
-    vi.mocked(useAuthStore).mockImplementation((selector: (s: unknown) => unknown) => {
+    vi.mocked(useAuthStore).mockImplementation((selector: (s: any) => unknown) => {
         const state = { login: mockLogin, ...overrides };
         return selector ? selector(state) : state;
     });
@@ -91,7 +90,7 @@ describe('LoginForm', () => {
     });
 
     it('navega para redirect quando fornecido após login', async () => {
-        vi.mocked(useAuthStore).mockImplementation((selector: (s: unknown) => unknown) => {
+        vi.mocked(useAuthStore).mockImplementation((selector: (s: any) => unknown) => {
             const state = { login: mockLogin };
             return selector ? selector(state) : state;
         });
