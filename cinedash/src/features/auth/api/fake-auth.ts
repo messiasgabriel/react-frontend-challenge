@@ -1,4 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
+import { env } from '@/shared/config/env';
 
 export interface JwtPayload {
     sub: string;
@@ -11,10 +12,7 @@ export interface JwtPayload {
 }
 
 function getSecret(): Uint8Array {
-    return new TextEncoder().encode(
-        import.meta.env.VITE_JWT_SECRET ||
-            'cinedash-dev-secret-key-min-32-chars!',
-    );
+    return new TextEncoder().encode(env.JWT_SECRET);
 }
 
 export async function createToken(email: string): Promise<string> {
