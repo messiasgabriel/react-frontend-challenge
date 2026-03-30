@@ -1,6 +1,7 @@
 import { Bookmark, BookmarkCheck, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import type { WatchlistMovie } from '@/entities/movie';
+import { toWatchlistMovie } from '@/entities/movie';
 import { useWatchlistStore } from '../model/watchlist-store';
 import { Button } from '@/shared/ui/button';
 
@@ -28,17 +29,7 @@ export function WatchlistToggle({ movie, showLabel }: WatchlistToggleProps) {
                 icon: <XCircle className="size-4 text-destructive" />,
             });
         } else {
-            const normalized: WatchlistMovie = {
-                id: movie.id,
-                title: movie.title,
-                poster_path: movie.poster_path,
-                release_date: movie.release_date,
-                vote_average: movie.vote_average,
-                genre_ids: movie.genre_ids?.length
-                    ? movie.genre_ids
-                    : (movie.genres?.map((g) => g.id) ?? []),
-            };
-            addMovie(normalized);
+            addMovie(toWatchlistMovie(movie));
             toast.success('Adicionado à lista', {
                 description: `${movie.title} foi adicionado à sua lista`,
             });

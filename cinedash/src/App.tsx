@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
 import { useAuthStore } from '@/features/auth';
+import { queryClient } from '@/app/providers/query-provider';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 function App() {
@@ -22,7 +23,12 @@ function App() {
         );
     }
 
-    return <RouterProvider router={router} context={{ isAuthenticated }} />;
+    return (
+        <RouterProvider
+            router={router}
+            context={{ isAuthenticated, queryClient }}
+        />
+    );
 }
 
 export default App;

@@ -17,16 +17,24 @@ export async function tmdbFetch<T>(
         }
     }
 
-    const response = await fetch(url.toString(), {
-        headers: {
-            Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json',
-        },
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
 
-    if (!response.ok) {
-        throw new ApiError(response.status, response.statusText);
+    try {
+        const response = await fetch(url.toString(), {
+            headers: {
+                Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json',
+            },
+            signal: controller.signal,
+        });
+
+        if (!response.ok) {
+            throw new ApiError(response.status, response.statusText);
+        }
+
+        return response.json() as Promise<T>;
+    } finally {
+        clearTimeout(timeout);
     }
-
-    return response.json() as Promise<T>;
 }

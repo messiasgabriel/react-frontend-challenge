@@ -40,6 +40,7 @@ export {
 } from './api/movie.queries';
 
 export { getImageUrl } from './lib/get-image-url';
+export { toWatchlistMovie } from './lib/normalize-to-watchlist';
 
 export { MovieCard } from './ui/movie-card';
 export { MovieHero } from './ui/movie-hero';

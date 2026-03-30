@@ -13,6 +13,11 @@ import {
 import { WatchlistToggle } from '@/features/watchlist';
 
 export const Route = createFileRoute('/_authenticated/movie/$movieId')({
+    loader: ({ params, context }) => {
+        const id = Number(params.movieId);
+        context.queryClient.ensureQueryData(movieCreditsQueryOptions(id));
+        context.queryClient.ensureQueryData(movieVideosQueryOptions(id));
+    },
     component: MovieDetailPage,
 });
 
@@ -27,9 +32,6 @@ export function MovieDetailPage() {
         isError,
         refetch,
     } = useQuery(movieDetailQueryOptions(id));
-
-    useQuery(movieCreditsQueryOptions(id));
-    useQuery(movieVideosQueryOptions(id));
 
     return (
         <div className="container mx-auto px-4">
