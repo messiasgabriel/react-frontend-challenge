@@ -45,19 +45,25 @@ export function WatchlistToggle({ movie, showLabel }: WatchlistToggleProps) {
         }
     };
 
+    const ariaLabel = inWatchlist
+        ? `Remover ${movie.title} da lista`
+        : `Adicionar ${movie.title} à lista`;
+
     return (
         <Button
             variant={inWatchlist ? 'default' : 'secondary'}
             size={showLabel ? 'default' : 'icon'}
+            aria-label={ariaLabel}
+            aria-pressed={inWatchlist}
             className={
                 showLabel ? 'gap-2 cursor-pointer' : 'h-8 w-8 cursor-pointer'
             }
             onClick={handleToggle}
         >
             {inWatchlist ? (
-                <BookmarkCheck className="size-4" />
+                <BookmarkCheck className="size-4" aria-hidden="true" />
             ) : (
-                <Bookmark className="size-4" />
+                <Bookmark className="size-4" aria-hidden="true" />
             )}
             {showLabel && (inWatchlist ? 'Na lista' : 'Adicionar à lista')}
         </Button>

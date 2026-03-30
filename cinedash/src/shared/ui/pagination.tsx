@@ -26,20 +26,21 @@ export function Pagination({
     const pages = getPageNumbers();
 
     return (
-        <div className="flex items-center justify-center gap-1 pt-4 flex-wrap">
+        <nav aria-label="Navegação de páginas" className="flex items-center justify-center gap-1 pt-4 flex-wrap">
             {/* Primeira */}
             <Button
                 variant="outline"
                 size="sm"
                 onClick={() => onPageChange(1)}
                 disabled={currentPage === 1}
+                aria-label="Ir para primeira página"
                 className="cursor-pointer"
             >
                 Primeira
             </Button>
 
             {currentPage > 2 && (
-                <span className="px-1 text-muted-foreground">...</span>
+                <span aria-hidden="true" className="px-1 text-muted-foreground">...</span>
             )}
 
             {/* Números de página */}
@@ -52,6 +53,8 @@ export function Pagination({
                         size="sm"
                         onClick={() => onPageChange(pageNum)}
                         disabled={isActive}
+                        aria-label={`Página ${pageNum}`}
+                        aria-current={isActive ? 'page' : undefined}
                         className="cursor-pointer min-w-9"
                     >
                         {pageNum}
@@ -60,7 +63,7 @@ export function Pagination({
             })}
 
             {currentPage < maxPages - 1 && (
-                <span className="px-1 text-muted-foreground">...</span>
+                <span aria-hidden="true" className="px-1 text-muted-foreground">...</span>
             )}
 
             {/* Última */}
@@ -69,10 +72,11 @@ export function Pagination({
                 size="sm"
                 onClick={() => onPageChange(maxPages)}
                 disabled={currentPage === maxPages}
+                aria-label={`Ir para última página (${maxPages})`}
                 className="cursor-pointer"
             >
                 Última
             </Button>
-        </div>
+        </nav>
     );
 }

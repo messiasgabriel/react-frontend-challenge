@@ -7,12 +7,15 @@ export function SearchBar() {
 
     return (
         <div className="w-full max-w-2xl">
+            <label htmlFor="movie-search" className="sr-only">Buscar filmes</label>
             <Input
+                id="movie-search"
                 type="search"
                 placeholder="Buscar filmes... (ex: Inception, Matrix)"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full"
+                aria-label="Buscar filmes"
             />
         </div>
     );

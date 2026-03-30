@@ -13,9 +13,10 @@ export function RatingFilter() {
 
     return (
         <div className="flex items-center gap-3 rounded-lg border border-border/40 bg-card/50 px-3 py-1.5 backdrop-blur-sm">
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground whitespace-nowrap">
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground whitespace-nowrap" aria-hidden="true">
                 <Star
                     className={`size-3.5 transition-colors ${isActive ? 'fill-primary/80 text-primary/80' : ''}`}
+                    aria-hidden="true"
                 />
                 <span className="text-xs tabular-nums">{label}</span>
             </div>
@@ -25,6 +26,7 @@ export function RatingFilter() {
                 min={0}
                 max={10}
                 step={1}
+                aria-label={`Filtrar por nota: de ${minRating} a ${maxRating}`}
                 className="w-28"
             />
         </div>

@@ -61,10 +61,19 @@ export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
                 </p>
             </div>
 
-            <Carousel setApi={setApi} opts={{ loop: true }}>
+            <Carousel
+                setApi={setApi}
+                opts={{ loop: true }}
+                aria-label="Filmes em destaque"
+                aria-roledescription="carrossel"
+            >
                 <CarouselContent>
-                    {featured.map((movie) => (
-                        <CarouselItem key={movie.id}>
+                    {featured.map((movie, i) => (
+                        <CarouselItem
+                            key={movie.id}
+                            aria-label={`Slide ${i + 1} de ${featured.length}: ${movie.title}`}
+                            aria-roledescription="slide"
+                        >
                             <div className="relative w-full aspect-16/7 overflow-hidden rounded-xl">
                                 {movie.backdrop_path ? (
                                     <img
@@ -78,11 +87,11 @@ export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
                                         decoding="async"
                                     />
                                 ) : (
-                                    <div className="w-full h-full bg-muted" />
+                                    <div className="w-full h-full bg-muted" aria-hidden="true" />
                                 )}
 
                                 {/* Gradiente overlay */}
-                                <div className="absolute inset-0 bg-gradient-to- from-black/80 via-black/30 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to- from-black/80 via-black/30 to-transparent" aria-hidden="true" />
 
                                 {/* Conteúdo */}
                                 <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
@@ -91,8 +100,8 @@ export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
                                     </h2>
 
                                     <div className="flex items-center gap-3 text-sm text-white/80">
-                                        <span className="flex items-center gap-1">
-                                            <Star className="size-3.5 fill-yellow-400 text-yellow-400" />
+                                        <span className="flex items-center gap-1" aria-label={`Nota: ${movie.vote_average.toFixed(1)}`}>
+                                            <Star className="size-3.5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
                                             {movie.vote_average.toFixed(1)}
                                         </span>
                                         {movie.release_date && (
@@ -134,17 +143,19 @@ export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
             </Carousel>
 
             {/* Indicadores */}
-            <div className="flex justify-center gap-1.5 mt-3">
-                {featured.map((_, i) => (
+            <div role="tablist" aria-label="Slides do carrossel" className="flex justify-center gap-1.5 mt-3">
+                {featured.map((movie, i) => (
                     <button
                         key={i}
+                        role="tab"
                         onClick={() => api?.scrollTo(i)}
+                        aria-label={`Ir para ${movie.title}`}
+                        aria-selected={i === current}
                         className={`h-1.5 rounded-full transition-all cursor-pointer ${
                             i === current
                                 ? 'w-6 bg-primary'
                                 : 'w-1.5 bg-muted-foreground/40 hover:bg-muted-foreground/60'
                         }`}
-                        aria-label={`Ir para slide ${i + 1}`}
                     />
                 ))}
             </div>

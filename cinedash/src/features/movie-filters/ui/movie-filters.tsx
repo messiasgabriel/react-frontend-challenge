@@ -87,8 +87,9 @@ export function MovieFilters() {
 
                 {/* Year Filter */}
                 <div className="flex-1 space-y-2">
-                    <Label className="text-sm font-medium">Ano</Label>
+                    <Label htmlFor="year-filter" className="text-sm font-medium">Ano</Label>
                     <Input
+                        id="year-filter"
                         type="text"
                         inputMode="numeric"
                         placeholder="Ex: 2023"
@@ -96,9 +97,11 @@ export function MovieFilters() {
                         onChange={(e) => handleYearChange(e.target.value)}
                         maxLength={4}
                         className="w-fit"
+                        aria-invalid={!!yearError}
+                        aria-describedby={yearError ? 'year-error' : undefined}
                     />
                     {yearError && (
-                        <p className="text-xs text-destructive">{yearError}</p>
+                        <p id="year-error" role="alert" className="text-xs text-destructive">{yearError}</p>
                     )}
                 </div>
 
