@@ -14,10 +14,8 @@ import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { toast } from 'sonner';
 import { getImageUrl, genresQueryOptions } from '@/entities/movie';
-import type { WatchlistMovie } from '@/entities/movie';
+import type { WatchlistMovie, Genre } from '@/entities/movie';
 import { useWatchlistStore } from '../model/watchlist-store';
-
-type Genre = { id: number; name: string };
 
 function createWatchlistColumns(
     onRemove: (movie: WatchlistMovie) => void,
@@ -55,6 +53,13 @@ function createWatchlistColumns(
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
+                    aria-label={
+                        column.getIsSorted() === 'asc'
+                            ? 'Título — ordenado crescente, clique para ordenar decrescente'
+                            : column.getIsSorted() === 'desc'
+                              ? 'Título — ordenado decrescente, clique para remover ordenação'
+                              : 'Título — clique para ordenar'
+                    }
                     className="hover:bg-muted"
                 >
                     Título
@@ -66,7 +71,7 @@ function createWatchlistColumns(
                 <Link
                     to="/movie/$movieId"
                     params={{ movieId: row.original.id.toString() }}
-                    className="cursor-pointer text-foreground hover:text-primary font-medium transition-colors"
+                    className="cursor-pointer text-foreground hover:text-primary font-medium transition-colors underline underline-offset-2 decoration-muted-foreground/40"
                 >
                     {row.original.title}
                 </Link>
@@ -97,6 +102,13 @@ function createWatchlistColumns(
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
                     }
+                    aria-label={
+                        column.getIsSorted() === 'asc'
+                            ? 'Ano — ordenado crescente, clique para ordenar decrescente'
+                            : column.getIsSorted() === 'desc'
+                              ? 'Ano — ordenado decrescente, clique para remover ordenação'
+                              : 'Ano — clique para ordenar'
+                    }
                     className="hover:bg-muted"
                 >
                     Ano
@@ -118,6 +130,13 @@ function createWatchlistColumns(
                     variant="ghost"
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === 'asc')
+                    }
+                    aria-label={
+                        column.getIsSorted() === 'asc'
+                            ? 'Nota — ordenado crescente, clique para ordenar decrescente'
+                            : column.getIsSorted() === 'desc'
+                              ? 'Nota — ordenado decrescente, clique para remover ordenação'
+                              : 'Nota — clique para ordenar'
                     }
                     className="hover:bg-muted"
                 >

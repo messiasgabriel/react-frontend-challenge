@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
 import { MovieCard, MovieCardSkeleton } from '@/entities/movie';
@@ -24,9 +24,11 @@ export const Route = createFileRoute('/_authenticated/dashboard')({
 function MoviesGrid({
     movies,
     isLoading,
+    isFetching,
 }: {
     movies: Movie[];
     isLoading: boolean;
+    isFetching: boolean;
 }) {
     if (isLoading) {
         return (
@@ -59,7 +61,7 @@ function MoviesGrid({
         <div
             aria-live="polite"
             aria-label="Lista de filmes"
-            className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            className={`grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 transition-opacity duration-200 ${isFetching ? 'opacity-60' : 'opacity-100'}`}
         >
             {movies.map((movie, i) => (
                 <MovieCard
@@ -80,13 +82,17 @@ export function DashboardPage() {
     const query = useSearchStore((s) => s.query);
     const { genreId, year, minRating, maxRating } = useFiltersStore();
 
-    useEffect(() => {
-        if (page !== 1) {
-            navigate({ search: { page: 1 } });
-        }
-    }, [query, genreId, year, minRating, maxRating, navigate, page]);
+    const prevFilters = useRef({ query, genreId, year, minRating, maxRating });
 
-    const { movies, totalPages, isLoading, isError, refetch, title } =
+    useEffect(() => {
+        const current = { query, genreId, year, minRating, maxRating };
+        if (JSON.stringify(prevFilters.current) !== JSON.stringify(current)) {
+            prevFilters.current = current;
+            if (page !== 1) navigate({ search: { page: 1 } });
+        }
+    }, [query, genreId, year, minRating, maxRating, page, navigate]);
+
+    const { movies, totalPages, isLoading, isFetching, isError, refetch, title } =
         useMoviesQuery(page);
 
     function setPage(newPage: number) {
@@ -105,10 +111,10 @@ export function DashboardPage() {
                 onClick={() => navigate({ to: '/' })}
                 className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
-                <ArrowLeft className="size-4" />
+                <ArrowLeft className="size-4" aria-hidden="true" />
                 Voltar
             </Button>
-            <h1 className="text-3xl font-bold text-foreground">{title}</h1>
+            <h1 aria-live="polite" aria-atomic="true" className="text-3xl font-bold text-foreground">{title}</h1>
 
             <div className="flex justify-center">
                 <SearchBar />
@@ -134,7 +140,7 @@ export function DashboardPage() {
                 </div>
             )}
 
-            {!isError && <MoviesGrid movies={movies} isLoading={isLoading} />}
+            {!isError && <MoviesGrid movies={movies} isLoading={isLoading} isFetching={isFetching} />}
 
             {!isLoading && !isError && movies.length > 0 && (
                 <Pagination

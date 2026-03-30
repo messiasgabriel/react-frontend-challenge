@@ -1,7 +1,8 @@
 const COOKIE_NAME = 'cinedash_token';
 
 export function setCookie(token: string, maxAgeSeconds: number): void {
-    document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax`;
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${COOKIE_NAME}=${encodeURIComponent(token)}; path=/; max-age=${maxAgeSeconds}; SameSite=Lax${secure}`;
 }
 
 export function getCookie(): string | null {

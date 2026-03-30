@@ -49,7 +49,7 @@ function SelectTrigger({
         >
             {children}
             <SelectPrimitive.Icon asChild>
-                <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
+                <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" aria-hidden="true" />
             </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
     );
@@ -162,7 +162,7 @@ function SelectScrollUpButton({
             )}
             {...props}
         >
-            <ChevronUpIcon />
+            <ChevronUpIcon aria-hidden="true" />
         </SelectPrimitive.ScrollUpButton>
     );
 }
@@ -180,7 +180,7 @@ function SelectScrollDownButton({
             )}
             {...props}
         >
-            <ChevronDownIcon />
+            <ChevronDownIcon aria-hidden="true" />
         </SelectPrimitive.ScrollDownButton>
     );
 }

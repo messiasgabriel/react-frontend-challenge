@@ -119,19 +119,16 @@ export function MovieHero({ movies, showActions = true }: MovieHeroProps) {
 
                                     {showActions && (
                                         <div className="flex items-center gap-2 pt-1">
-                                            <Link
-                                                to="/movie/$movieId"
-                                                params={{
-                                                    movieId: String(movie.id),
-                                                }}
-                                            >
-                                                <Button
-                                                    size="sm"
-                                                    className="cursor-pointer"
+                                            <Button asChild size="sm" className="cursor-pointer">
+                                                <Link
+                                                    to="/movie/$movieId"
+                                                    params={{
+                                                        movieId: String(movie.id),
+                                                    }}
                                                 >
                                                     Ver detalhes
-                                                </Button>
-                                            </Link>
+                                                </Link>
+                                            </Button>
                                             <WatchlistToggle movie={movie} />
                                         </div>
                                     )}

@@ -47,7 +47,7 @@ export function LoginForm() {
                 </p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                 <div className="space-y-1.5">
                     <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">
                         E-mail
@@ -96,7 +96,7 @@ export function LoginForm() {
             </form>
 
             <p className="text-center text-xs text-muted-foreground/60">
-                Use qualquer e-mail e senha com 7+ caracteres
+                Use qualquer e-mail e senha com 6+ caracteres
             </p>
         </div>
     );

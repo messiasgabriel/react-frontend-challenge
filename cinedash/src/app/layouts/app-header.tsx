@@ -89,12 +89,12 @@ export function AppHeader() {
                             </Button>
                         </>
                     ) : (
-                        <Link to="/login" search={{ redirect: pathname }}>
-                            <Button size="sm" className="gap-2 cursor-pointer">
+                        <Button asChild size="sm" className="gap-2 cursor-pointer">
+                            <Link to="/login" search={{ redirect: pathname }}>
                                 <LogIn className="size-4" aria-hidden="true" />
                                 Entrar
-                            </Button>
-                        </Link>
+                            </Link>
+                        </Button>
                     )}
                 </div>
             </div>

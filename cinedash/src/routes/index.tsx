@@ -77,12 +77,12 @@ export function HomePage() {
 
                 {/* CTA */}
                 <div className="flex justify-center pb-4">
-                    <Link to="/dashboard" search={{ page: 1 }}>
-                        <Button size="lg" className="gap-2 cursor-pointer px-8">
+                    <Button asChild size="lg" className="gap-2 cursor-pointer px-8">
+                        <Link to="/dashboard" search={{ page: 1 }}>
                             <Search className="size-4" aria-hidden="true" />
                             Explorar catálogo
-                        </Button>
-                    </Link>
+                        </Link>
+                    </Button>
                 </div>
 
             </main>

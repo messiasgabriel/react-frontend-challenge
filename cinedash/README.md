@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# CineDash
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dashboard de curadoria e descoberta de filmes utilizando a API do TMDB.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19 + TypeScript 5.9
+- Vite 8 + TanStack Router (file-based routing)
+- TanStack Query (data fetching e cache)
+- TanStack Table (tabela ordenável da watchlist)
+- Zustand (gerenciamento de estado)
+- Tailwind CSS v4 + shadcn/ui
+- React Hook Form + Zod (validação)
+- Jose (JWT simulado)
+- Vitest + React Testing Library
 
-## React Compiler
+## Funcionalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Login simulado com JWT (jose) e persistência via cookie
+- Dashboard com busca (debounce 300ms), filtros (gênero, ano, nota) e paginação
+- Três queries paralelas: trending, busca e discover com troca dinâmica
+- Detalhes do filme: sinopse, elenco, trailer, orçamento e links externos
+- Watchlist com tabela ordenável e persistência em localStorage
+- Tema dark/light persistido
+- Arquitetura Feature-Sliced Design (FSD)
+- 110 testes unitários e de integração
 
-## Expanding the ESLint configuration
+## Como rodar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Veja [INSTRUCTIONS.md](./INSTRUCTIONS.md) para instruções detalhadas.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env  # Configure VITE_TMDB_ACCESS_TOKEN e VITE_JWT_SECRET
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Decisões técnicas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Veja [ARCHITECTURE.md](./ARCHITECTURE.md) para a documentação completa das decisões de arquitetura.

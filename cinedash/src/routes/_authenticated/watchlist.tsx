@@ -19,7 +19,7 @@ export function WatchlistPage() {
                 onClick={() => router.history.back()}
                 className="gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
             >
-                <ArrowLeft className="size-4" />
+                <ArrowLeft className="size-4" aria-hidden="true" />
                 Voltar
             </Button>
             <div className="mb-6">

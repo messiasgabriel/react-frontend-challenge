@@ -45,9 +45,9 @@ export function MovieCard({ movie, action, priority = false }: MovieCardProps) {
                     </div>
                 )}
                 <CardContent className="p-3 space-y-2">
-                    <h3 className="text-foreground text-sm font-medium line-clamp-2 h-10 group-hover:text-primary transition-colors">
+                    <p className="text-foreground text-sm font-medium line-clamp-2 h-10 group-hover:text-primary transition-colors">
                         {movie.title}
-                    </h3>
+                    </p>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
                             <Star className="size-3.5 fill-yellow-500 text-yellow-500" />

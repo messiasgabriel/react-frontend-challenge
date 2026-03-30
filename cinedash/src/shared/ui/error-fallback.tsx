@@ -31,8 +31,8 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
                     </details>
 
                     <div className="flex gap-2 justify-center pt-2">
-                        <Button onClick={resetError}>
-                            Voltar ao Dashboard
+                        <Button onClick={() => window.location.replace('/')}>
+                            Voltar ao início
                         </Button>
                         <Button
                             variant="outline"

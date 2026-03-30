@@ -1,6 +1,6 @@
-const { TMDB_ACCESS_TOKEN, TMDB_BASE_URL } = env;
 import { env } from '@/shared/config/env';
 import { ApiError } from './api-error';
+const { TMDB_ACCESS_TOKEN, TMDB_BASE_URL } = env;
 
 export async function tmdbFetch<T>(
     endpoint: string,

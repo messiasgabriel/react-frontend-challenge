@@ -18,7 +18,10 @@ function getSecret(): Uint8Array {
 export async function createToken(email: string): Promise<string> {
     const name = email.split('@')[0];
 
-    return new SignJWT({ email, name } as unknown as Record<string, unknown>)
+    return new SignJWT({ email, name } satisfies Pick<
+        JwtPayload,
+        'email' | 'name'
+    >)
         .setProtectedHeader({ alg: 'HS256' })
         .setSubject(email)
         .setIssuer('cinedash')
@@ -44,7 +47,10 @@ export async function verifyToken(token: string): Promise<JwtPayload | null> {
             iat: payload.iat,
             exp: payload.exp,
         };
-    } catch {
+    } catch (error) {
+        if (import.meta.env.DEV) {
+            console.warn('[verifyToken] Token inválido:', error);
+        }
         return null;
     }
 }

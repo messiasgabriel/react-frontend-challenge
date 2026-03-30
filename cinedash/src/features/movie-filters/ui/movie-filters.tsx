@@ -59,14 +59,14 @@ export function MovieFilters() {
             <div className="flex flex-col md:flex-row md:items-end gap-4">
                 {/* Genre Filter */}
                 <div className="flex-1 space-y-2">
-                    <Label className="text-sm font-medium">Gênero</Label>
+                    <Label htmlFor="genre-filter" className="text-sm font-medium">Gênero</Label>
                     <Select
                         value={genreId?.toString() || 'all'}
                         onValueChange={(value) =>
                             setGenre(value === 'all' ? null : Number(value))
                         }
                     >
-                        <SelectTrigger className="cursor-pointer">
+                        <SelectTrigger id="genre-filter" aria-label="Filtrar por gênero" className="cursor-pointer">
                             <SelectValue placeholder="Todos os gêneros" />
                         </SelectTrigger>
                         <SelectContent>
