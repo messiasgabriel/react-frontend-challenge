@@ -44,6 +44,8 @@ npm run build     # Build de produção
 npm run preview   # Preview do build
 ```
 
+> **Atenção:** acesse sempre via `http://localhost:5173`, nunca pelo IP da máquina (ex: `192.168.x.x`). O login utiliza `crypto.subtle` (Web Crypto API), que só está disponível em contextos seguros — HTTPS ou `localhost` especificamente. Acessar via IP em HTTP resultará em erro ao tentar autenticar.
+
 ## Testes
 
 ```bash

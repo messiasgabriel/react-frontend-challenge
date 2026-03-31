@@ -15,11 +15,13 @@ vi.mock('@/features/auth/model/auth-store', () => ({
     useAuthStore: vi.fn(),
 }));
 
+type AuthStoreState = ReturnType<typeof useAuthStore.getState>;
+
 const mockLogin = vi.fn();
 
 function setupAuthStore(overrides = {}) {
-    vi.mocked(useAuthStore).mockImplementation((selector: (s: any) => unknown) => {
-        const state = { login: mockLogin, ...overrides };
+    vi.mocked(useAuthStore).mockImplementation((selector: (s: AuthStoreState) => unknown) => {
+        const state = { login: mockLogin, ...overrides } as unknown as AuthStoreState;
         return selector ? selector(state) : state;
     });
 }
@@ -90,8 +92,8 @@ describe('LoginForm', () => {
     });
 
     it('navega para redirect quando fornecido após login', async () => {
-        vi.mocked(useAuthStore).mockImplementation((selector: (s: any) => unknown) => {
-            const state = { login: mockLogin };
+        vi.mocked(useAuthStore).mockImplementation((selector: (s: AuthStoreState) => unknown) => {
+            const state = { login: mockLogin } as unknown as AuthStoreState;
             return selector ? selector(state) : state;
         });
         vi.doMock('@tanstack/react-router', () => ({
